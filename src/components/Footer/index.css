@@ -1,0 +1,18 @@
+.footer{
+    padding: 20px 0;
+}
+
+.footer__container{
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+
+}
+
+.footer__links{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}

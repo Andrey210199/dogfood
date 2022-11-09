@@ -1,19 +1,24 @@
-import s from "./index.module.css"
+import cn from "classnames";
 
-export function Card(){
+import "./styles.css";
+
+export function Card({name, price, discount, wight, description, picture}){
+
+    const discountPrise = Math.round(price - price * discount/100);
+
     return( 
         <div className="card">
 
-            <div className="card__sticky top__sticky">
+            <div className={cn( !!discount? "card__stickys": "card__sticky", "top__sticky")}>
 
-                <div className="card__sticky_left">
-                    <span className="discont">-15</span>
-                </div>
+               {!!discount && <div className="card__sticky_left">
+                    <span className="discount">{`-${discount}%`}</span>
+                </div>}
             
                 <div className="card__sticky_right">
 
                     <button className="card__favorite">
-
+                        <span className="card__favorite-icon"> ♥</span>
                     </button>
                 </div>
 
@@ -21,17 +26,16 @@ export function Card(){
 
             <a href="#" className="card__link">
 
-                <img src="#" alt="" className="card__img"/>
-                <span className="card__old-price">400</span>
-                <span className="card__price">300</span>
-                <span className="card__wight">4</span>
-                <p className="card__name">le</p>
+                <img src={picture} alt={description} className="card__img"/>
+                <span className={!!discount ? "card__old-price": "card__price"}>{price}</span>
+                {!!discount && <span className="card__price_discount">{discountPrise}</span>}
+
+                <span className="card__wight">{wight}</span>
+                <p className="card__name">{name}</p>
 
             </a>
 
-            <a href="#" className="card__cart btn">
-                klesgf
-            </a>
+            <a href="#" className="card__cart btn">В корзину</a>
         </div>
     )
 }
