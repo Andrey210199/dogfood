@@ -16,3 +16,13 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
 }
+
+.footer__link{
+    color: currentColor;
+    text-decoration: none;
+}
+
+.social{
+    display: flex;
+    gap: 10px;
+}

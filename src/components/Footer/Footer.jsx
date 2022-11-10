@@ -1,4 +1,6 @@
+import { type } from "@testing-library/user-event/dist/type";
 import cn from "classnames";
+import React from "react";
 
 import "./index.css";
 
@@ -9,7 +11,13 @@ export function Footer({children}){
 			<div className="footer__container">
 
                 <div className="footer__logo">
-                    {children}
+                    {React.Children.map(children, child => {
+                        if(child?.type.name === "Logo"){
+                            return child;
+                        }
+                    })
+
+                    }
                     <span>© «Интернет-магазин DogFood»</span>
                 </div>
 
@@ -26,12 +34,12 @@ export function Footer({children}){
                 </div>
 
                 <div className="contacts">
-                    <a href="tel:8">8 000 00 00</a>
+                    <a href="tel:8" className="footer__link">8 000 00 00</a>
 
                     <div className="social">
-                        <a href="#">Telegram</a>
-                        <a href="#">WhatsApp</a>
-                        <a href="#">VK</a>
+                        <a href="#" className="footer__link">Telegram</a>
+                        <a href="#" className="footer__link">WhatsApp</a>
+                        <a href="#" className="footer__link">VK</a>
                     </div>
                 </div>
 
