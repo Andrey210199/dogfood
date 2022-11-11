@@ -22,6 +22,14 @@
     text-decoration: none;
 }
 
+.footer__link:hover{
+    color: #f9f9f9;
+}
+
+.footer__link:active{
+    color: #858380;
+}
+
 .social{
     display: flex;
     gap: 10px;

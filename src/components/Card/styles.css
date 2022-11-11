@@ -63,3 +63,24 @@
 .btn:active{
     background-color: #947306;
 }
+
+.card__favorite{
+    border: none;
+    background-color: transparent;
+    color: #35080a4d;
+    text-shadow: #fff 1px 1px 0, #333 -1px -1px 0;
+    font-size: 2em;
+}
+
+.card__favorite:hover{
+    color:#720f1493;
+}
+
+.card__favorite_active{
+    color: #ee000ce5;
+    text-shadow: #fff 1px 1px 0, #333 -1px -1px 0;
+}
+
+.card__favorite_active:hover{
+    color: #aa131be5;
+}

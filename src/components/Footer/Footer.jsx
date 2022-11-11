@@ -1,4 +1,3 @@
-import { type } from "@testing-library/user-event/dist/type";
 import cn from "classnames";
 import React from "react";
 

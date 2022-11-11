@@ -1,10 +1,17 @@
 import cn from "classnames";
+import isLike from "../../Utilites/IsLike";
 
 import "./styles.css";
 
-export function Card({name, price, discount, wight, description, picture}){
-
+export function Card({name, price, discount, wight, description, pictures: picture, ...props}){
+    const {_id: id, likes, handleLike, user} = props;
     const discountPrise = Math.round(price - price * discount/100);
+
+    function handleClickLike(){
+        handleLike(id,likes);
+    }
+
+    const like = isLike(likes, user?._id);
 
     return( 
         <div className="card">
@@ -17,7 +24,7 @@ export function Card({name, price, discount, wight, description, picture}){
             
                 <div className="card__sticky_right">
 
-                    <button className="card__favorite">
+                    <button className={cn("card__favorite", {"card__favorite_active": like} )} onClick={handleClickLike}>
                         <span className="card__favorite-icon"> ♥</span>
                     </button>
                 </div>
