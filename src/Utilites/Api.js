@@ -9,8 +9,8 @@
         return res? res.json(): Promise.reject(`Ошибка: ${res.status}`);
     }
 
-    getProducts(){
-        return fetch(`${this._url}/products`,{
+    getProducts(idProduct){
+        return fetch(`${this._url}/products${idProduct && `/${idProduct}`}`,{
             method: "GET",
             headers: this._headers
         }).then(this._onResponse);
@@ -28,8 +28,8 @@
         ).then(this._onResponse);
     }
 
-    setProductsUser(){
-        return Promise.all([this.getProducts(), this.userInfo()])
+    setProductsUser(idProduct=""){
+        return Promise.all([this.getProducts(idProduct), this.userInfo()])
         .catch(this._onResponse);
     }
 

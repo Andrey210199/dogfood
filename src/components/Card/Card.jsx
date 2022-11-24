@@ -1,10 +1,15 @@
 import cn from "classnames";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { CardContext } from "../../Context/CardContext";
+import { UserContext } from "../../Context/UserContext";
 import isLike from "../../Utilites/IsLike";
 
 import "./styles.css";
 
-export function Card({name, price, discount, wight, description, pictures: picture, ...props}){
-    const {_id: id, likes, handleLike, user} = props;
+export default function Card({name, price, discount, wight, description, pictures: picture, likes, _id: id}){
+    const {user} = useContext(UserContext);
+    const {handleLike} = useContext(CardContext);
     const discountPrise = Math.round(price - price * discount/100);
 
     function handleClickLike(){
@@ -31,7 +36,7 @@ export function Card({name, price, discount, wight, description, pictures: pictu
 
             </div>
 
-            <a href="#" className="card__link">
+            <Link to={`product/${id}`} className="card__link">
 
                 <img src={picture} alt={description} className="card__img"/>
                 <span className={!!discount ? "card__old-price": "card__price"}>{price}</span>
@@ -40,7 +45,7 @@ export function Card({name, price, discount, wight, description, pictures: pictu
                 <span className="card__wight">{wight}</span>
                 <p className="card__name">{name}</p>
 
-            </a>
+            </Link>
 
             <a href="#" className="card__cart btn">В корзину</a>
         </div>

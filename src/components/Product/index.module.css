@@ -1,0 +1,8 @@
+.product{
+ display: flex;
+ gap: 10px;
+}
+
+.oldPrice{
+    text-decoration: line-through;
+}

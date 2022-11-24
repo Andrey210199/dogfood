@@ -1,8 +1,9 @@
-import { Header } from '../Header/Header';
-import { Footer } from '../Footer/Footer';
-import { CardList } from '../CardList/CardList';
-import { Logo } from '../Logo/Logo';
-import { Search } from '../Search/Search';
+import  Header from '../Header/Header';
+import  Footer from '../Footer/Footer';
+import CardList from '../CardList/CardList';
+import  Logo from '../Logo/Logo';
+import  Search from '../Search/Search';
+import { onRequest, onSubmit } from '../../Utilites/Search';
 
 
 import { useEffect, useState } from 'react';
@@ -11,6 +12,10 @@ import Api from '../../Utilites/Api';
 import useDebounce from '../../Hooks/UseDebounce';
 import api from '../../Utilites/Api';
 import isLike from '../../Utilites/IsLike';
+import { UserContext } from "../../Context/UserContext.js";
+import { CardContext } from "../../Context/CardContext.js";
+import { Route, Routes } from 'react-router-dom';
+import ProductPage from '../../Pages/Product-page/ProductPage';
 
 function App() {
 
@@ -18,22 +23,6 @@ function App() {
   const [search,setSearch] = useState("");
   const [user, setUser] = useState();
   const searchDebounce = useDebounce(search, 500);
-
-
-
-  function onRequest(){
-    api.search(searchDebounce)
-    .then((searchRes)=>{
-      setCards(searchRes);
-    })
-
-  }
-
-  //Поиск кнопка
-  function onSubmit(evt){
-    evt.preventDefault();
-    onRequest();
-  }
 
   //Поиск ввод
   function onInput(inputValue){
@@ -50,7 +39,11 @@ function App() {
   }
 
   useEffect(()=>{
-    onRequest();
+    onRequest(searchDebounce)
+    .then((searchRes)=>{
+      setCards(searchRes);
+    });
+
   },[searchDebounce]);
 
   useEffect(()=>{
@@ -67,22 +60,35 @@ function App() {
 
 
   return (
-    <>
+    <UserContext.Provider value={{user}}>
       <Header userData={user}>
         <Logo/>
         <Search onInput={onInput} onSubmit={onSubmit}/>
       </Header>
 
-      <main className={s.main}>
-        <div className={s.content}>
-        <CardList goods={cards} handleLike={handleLike} user={user}/>
-        </div>
+      <main className="main">
+        <CardContext.Provider value={{ cards, handleLike }}>
+          <Routes>
+
+            <Route index element={
+              <div className={s.content}>
+                <CardList/>
+              </div>
+
+            } />
+
+            <Route path="/product/:productId" element={
+              <ProductPage/>
+            }/>
+
+          </Routes>
+        </CardContext.Provider>
       </main>
 
       <Footer>
         <Logo/>
       </Footer>
-    </>
+    </UserContext.Provider>
   );
 }
 
