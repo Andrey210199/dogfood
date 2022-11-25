@@ -1,6 +1,6 @@
 import cn from "classnames";
 
-import s from "./index.module.css"
+import s from "./index.module.css";
 
 export default function Header({children, userData}){
     return( 

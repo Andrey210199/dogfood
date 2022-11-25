@@ -1,5 +1,5 @@
-import LogoSrc from "./Logo.svg"
-import s from "./index.module.css"
+import LogoSrc from "./Logo.svg";
+import s from "./index.module.css";
 
 export default function Logo({className, href}){
     return( 

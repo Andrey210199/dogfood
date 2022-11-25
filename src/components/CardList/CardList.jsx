@@ -1,8 +1,7 @@
-import { useContext } from "react"
-import { CardContext } from "../../Context/CardContext"
-import { UserContext } from "../../Context/UserContext"
-import Card from "../Card/Card"
-import s from "./index.module.css"
+import { useContext } from "react";
+import { CardContext } from "../../Context/CardContext";
+import Card from "../Card/Card";
+import s from "./index.module.css";
 
 export default function CardList(){
 

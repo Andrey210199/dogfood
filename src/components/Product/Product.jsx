@@ -2,30 +2,35 @@ import cn from "classnames";
 
 import s from "./index.module.css";
 import isLike from "../../Utilites/IsLike.js";
-import { createMarkup } from "../../Utilites/Product.js";
+import { createMarkup, scrollClear } from "../../Utilites/Product.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../../Context/UserContext";
 
-export default function Page({name, description, price, discount, likes, pictures, stock, tags, wight, _id }){
+export default function Page({name, description, price, discount, likes, pictures, stock, tags, wight, _id: id, handleLike }){
     const {user} = useContext(UserContext);
     const discountPrice =  Math.round(price - price * discount/100);
     const like = likes && isLike(likes, user?._id);
     const descriptionHTML = createMarkup(description);
     const navigate = useNavigate();
 
+    scrollClear();
+
+    function handleClickLike(){
+        handleLike(likes);
+    }
 
     return(
         <div className="main__content">
             <div className="title">
-                <a href="#" className={s.title__link} onClick={()=> navigate(-1)}>Назад</a>
+                <a href="#" className={ cn(s.title__link, "btn")} onClick={()=> navigate(-1)}>Назад</a>
                 <h1>{name}</h1>
                 <span>Артикул: <b>{wight}</b></span>
             </div>
 
             <div className={s.product}>
                 <div className={s.poduct_left}>
-                    {discount &&  
+                    {!!discount &&  
                         <div className={cn( !!discount? "card__stickys": "card__sticky", "top__sticky")}>
                             <div className="discount">{`-${discount}%`}</div>
                         </div>
@@ -37,7 +42,7 @@ export default function Page({name, description, price, discount, likes, picture
                 <div className={s.product_right}>
 
                      <div className={!!discount ? s.oldPrice: s.price}>{price}</div>
-                     {discount && <div className={s.discountPrice}>{discountPrice}</div>}
+                     {!!discount && <div className={s.discountPrice}>{discountPrice}</div>}
 
                      <div className={s.wight}>
                         <button className="btn minus">-</button>
@@ -45,7 +50,7 @@ export default function Page({name, description, price, discount, likes, picture
                         <button className="btn plus">+</button>
                      </div>
 
-                     <button className={cn("card__favorite", {"card__favorite_active": like} )}>
+                     <button className={cn("card__favorite", {"card__favorite_active": like} )} onClick={handleClickLike}>
                         <span className="card__favorite-icon"> ♥</span>
                     </button>
 

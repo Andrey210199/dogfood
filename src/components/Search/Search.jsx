@@ -1,9 +1,11 @@
 import { useState } from "react";
-import s from "./index.module.css"
+import { useNavigate } from "react-router-dom";
+import s from "./index.module.css";
 
 export default function Search({onInput, onSubmit}){
 
     const [inputText, setInputText] = useState("");
+    const navigate = useNavigate();
 
     function handleInput(evt){
         setInputText(evt.target.value);
@@ -12,8 +14,8 @@ export default function Search({onInput, onSubmit}){
 
     function handleSubmit(evt){
         evt.preventDefault();
+        navigate("/")
         onSubmit();
-        setInputText("");
     }
 
     function clearInput(){
