@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "./dogfood/static/css/main.cb596a2c.css",
-    "main.js": "./dogfood/static/js/main.678699b0.js",
-    "static/js/787.4a27967c.chunk.js": "./dogfood/static/js/787.4a27967c.chunk.js",
-    "static/media/Logo.svg": "./dogfood/static/media/Logo.9e6549179416d058fa3b52ce5f11c462.svg",
-    "static/media/circle.svg": "./dogfood/static/media/circle.5cdfb3ccbe5326e4a02163cc65c6537a.svg",
-    "index.html": "./dogfood/index.html",
-    "main.cb596a2c.css.map": "./dogfood/static/css/main.cb596a2c.css.map",
-    "main.678699b0.js.map": "./dogfood/static/js/main.678699b0.js.map",
-    "787.4a27967c.chunk.js.map": "./dogfood/static/js/787.4a27967c.chunk.js.map"
+    "main.css": "./static/css/main.cb596a2c.css",
+    "main.js": "./static/js/main.cc402231.js",
+    "static/js/787.4a27967c.chunk.js": "./static/js/787.4a27967c.chunk.js",
+    "static/media/Logo.svg": "./static/media/Logo.9e6549179416d058fa3b52ce5f11c462.svg",
+    "static/media/circle.svg": "./static/media/circle.5cdfb3ccbe5326e4a02163cc65c6537a.svg",
+    "index.html": "./index.html",
+    "main.cb596a2c.css.map": "./static/css/main.cb596a2c.css.map",
+    "main.cc402231.js.map": "./static/js/main.cc402231.js.map",
+    "787.4a27967c.chunk.js.map": "./static/js/787.4a27967c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cb596a2c.css",
-    "static/js/main.678699b0.js"
+    "static/js/main.cc402231.js"
   ]
 }
