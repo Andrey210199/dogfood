@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import {ROUTELINKHOME} from "../../Constant/Constant.js";
 import s from "./index.module.css";
 
 export default function Search({onInput, onSubmit}){
@@ -11,17 +13,19 @@ export default function Search({onInput, onSubmit}){
         setInputText(evt.target.value);
         onInput && onInput(evt.target.value);
     }
-
-    function handleSubmit(evt){
-        evt.preventDefault();
-        navigate("/")
-        onSubmit();
-    }
-
+    
     function clearInput(){
         setInputText("");
         onInput && onInput("");
     }
+
+    function handleSubmit(evt){
+        evt.preventDefault();
+        navigate(ROUTELINKHOME);
+        onSubmit();
+    }
+
+
 
     return( 
         <form action="" className="search" onSubmit={handleSubmit}>

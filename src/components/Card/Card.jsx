@@ -4,8 +4,9 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CardContext } from "../../Context/CardContext";
 import { UserContext } from "../../Context/UserContext";
-import isLike from "../../Utilites/IsLike";
 
+import isLike from "../../Utilites/IsLike";
+import {ROUTELINKHOME, ROUTELINKPRODUCT} from "../../Constant/Constant.js";
 import "./styles.css";
 
 export default function Card({name, price, discount, wight, description, pictures: picture, likes, _id: id}){
@@ -37,7 +38,7 @@ export default function Card({name, price, discount, wight, description, picture
 
             </div>
 
-            <Link to={`product/${id}`} className="card__link">
+            <Link to={ROUTELINKPRODUCT+id} className="card__link">
 
                 <img src={picture} alt={description} className="card__img"/>
                 <span className={!!discount ? "card__old-price": "card__price"}>{price}</span>

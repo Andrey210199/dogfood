@@ -6,22 +6,25 @@ import  Search from '../Search/Search';
 
 import { onRequest, onSubmit } from '../../Utilites/Search';
 import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import s from './index.module.css';
-import Api from '../../Utilites/Api';
 import useDebounce from '../../Hooks/UseDebounce';
-import api from '../../Utilites/Api';
-import isLike from '../../Utilites/IsLike';
+
 import { productLike } from "../../Utilites/Product.js";
 import { UserContext } from "../../Context/UserContext.js";
 import { CardContext } from "../../Context/CardContext.js";
-import { Route, Routes } from 'react-router-dom';
 import ProductPage from '../../Pages/Product-page/ProductPage';
 import NotFound from '../../Pages/NotFound/NotFound';
 
+import api from '../../Utilites/Api';
+import isLike from '../../Utilites/IsLike';
+import {ROUTELINKHOME, ROUTELINKPRODUCT} from "../../Constant/Constant.js";
+
+import s from './index.module.css';
+
 function App() {
 
-  const [cards, setCards]= useState();
+  const [cards, setCards]= useState([]);
   const [search,setSearch] = useState("");
   const [user, setUser] = useState();
   const searchDebounce = useDebounce(search, 500);
@@ -49,7 +52,7 @@ function App() {
 
   useEffect(()=>{
     
-   Api.setProductsUser()
+   api.setProductsUser()
    .then(([productsData, userData])=>{
     setUser(userData);
     setCards(productsData.products);
@@ -61,7 +64,7 @@ function App() {
 
 
   return (
-    <UserContext.Provider value={{user}}>
+    <UserContext.Provider value={{user, setSearch}}>
       <Header userData={user}>
         <Logo/>
         <Search onInput={onInput} onSubmit={onSubmit}/>
@@ -71,19 +74,19 @@ function App() {
         <CardContext.Provider value={{ cards, handleLike, setCards }}>
           <Routes>
 
-            <Route index element={
+            <Route path={ROUTELINKHOME} element={
               <div className={s.content}>
                 <CardList/>
               </div>
 
             } />
 
-            <Route path="/product/:productId" element={
+            <Route path={`${ROUTELINKPRODUCT}:productId`} element={
               <ProductPage/>
             }/>
 
             <Route path="*" element={
-              <NotFound/>
+              <NotFound setSearch={setSearch}/>
 
             }/>
 
