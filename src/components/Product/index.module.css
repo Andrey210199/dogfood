@@ -1,0 +1,39 @@
+.product{
+ display: flex;
+ justify-content: center;
+ gap: 10px;
+}
+
+.title{
+    text-align: center;
+}
+
+.subTitle{
+    padding-left: 20px;
+}
+
+.description{
+    padding-left: 20px;
+    border: 1px solid black;
+}
+
+.grid{
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+
+.naming{
+    border: 1px solid black;
+}
+
+.oldPrice{
+    text-decoration: line-through;
+    font-size: 0.9em;
+}
+
+.discountPrice{
+    color: red;
+    font-size: 1.2em;
+    font-weight: 500;
+}

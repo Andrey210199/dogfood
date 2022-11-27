@@ -1,10 +1,17 @@
 import cn from "classnames";
-import isLike from "../../Utilites/IsLike";
 
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { PageContext } from "../../Context/PageContext";
+import { GlobalContext } from "../../Context/GlobalContext";
+
+import isLike from "../../Utilites/IsLike";
+import { ROUTELINKPRODUCT} from "../../Constant/Constant.js";
 import "./styles.css";
 
-export function Card({name, price, discount, wight, description, pictures: picture, ...props}){
-    const {_id: id, likes, handleLike, user} = props;
+export default function Card({name, price, discount, wight, description, pictures: picture, likes, _id: id}){
+    const {user} = useContext(GlobalContext);
+    const {handleLike} = useContext(PageContext);
     const discountPrise = Math.round(price - price * discount/100);
 
     function handleClickLike(){
@@ -31,7 +38,7 @@ export function Card({name, price, discount, wight, description, pictures: pictu
 
             </div>
 
-            <a href="#" className="card__link">
+            <Link to={ROUTELINKPRODUCT+id} className="card__link">
 
                 <img src={picture} alt={description} className="card__img"/>
                 <span className={!!discount ? "card__old-price": "card__price"}>{price}</span>
@@ -40,7 +47,7 @@ export function Card({name, price, discount, wight, description, pictures: pictu
                 <span className="card__wight">{wight}</span>
                 <p className="card__name">{name}</p>
 
-            </a>
+            </Link>
 
             <a href="#" className="card__cart btn">В корзину</a>
         </div>

@@ -3,7 +3,7 @@ import React from "react";
 
 import "./index.css";
 
-export function Footer({children}){
+export default function Footer({children}){
     return( 
         <footer className={cn("footer","content")}>
 

@@ -1,0 +1,23 @@
+
+.content{
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+
+}
+
+
+.spiner{
+
+    width: 200px;
+    animation: Rotate 2s infinite linear;
+}
+
+@keyframes Rotate{
+
+    0% { transform: rotate(0);}
+
+    100%{ transform: rotate(360deg);}
+
+}
