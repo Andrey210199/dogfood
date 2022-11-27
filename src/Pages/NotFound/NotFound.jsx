@@ -4,10 +4,10 @@ import s from "./index.module.css";
 
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "../../Context/UserContext.js";
+import { GlobalContext } from "../../Context/GlobalContext.js";
 
 export default function NotFound({error}){
-    const {setSearch} = useContext(UserContext);
+    const {setSearch} = useContext(GlobalContext);
 
     function clearInputState(){
         setSearch("");

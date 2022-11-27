@@ -2,16 +2,16 @@ import cn from "classnames";
 
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { CardContext } from "../../Context/CardContext";
-import { UserContext } from "../../Context/UserContext";
+import { PageContext } from "../../Context/PageContext";
+import { GlobalContext } from "../../Context/GlobalContext";
 
 import isLike from "../../Utilites/IsLike";
-import {ROUTELINKHOME, ROUTELINKPRODUCT} from "../../Constant/Constant.js";
+import { ROUTELINKPRODUCT} from "../../Constant/Constant.js";
 import "./styles.css";
 
 export default function Card({name, price, discount, wight, description, pictures: picture, likes, _id: id}){
-    const {user} = useContext(UserContext);
-    const {handleLike} = useContext(CardContext);
+    const {user} = useContext(GlobalContext);
+    const {handleLike} = useContext(PageContext);
     const discountPrise = Math.round(price - price * discount/100);
 
     function handleClickLike(){

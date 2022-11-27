@@ -11,8 +11,8 @@ import { Route, Routes } from 'react-router-dom';
 import useDebounce from '../../Hooks/UseDebounce';
 
 import { productLike } from "../../Utilites/Product.js";
-import { UserContext } from "../../Context/UserContext.js";
-import { CardContext } from "../../Context/CardContext.js";
+import { GlobalContext } from "../../Context/GlobalContext.js";
+import { PageContext } from "../../Context/PageContext.js";
 import ProductPage from '../../Pages/Product-page/ProductPage';
 import NotFound from '../../Pages/NotFound/NotFound';
 
@@ -21,12 +21,15 @@ import isLike from '../../Utilites/IsLike';
 import {ROUTELINKHOME, ROUTELINKPRODUCT} from "../../Constant/Constant.js";
 
 import s from './index.module.css';
+import Spiner from '../Spiner/Spiner';
 
 function App() {
 
   const [cards, setCards]= useState([]);
   const [search,setSearch] = useState("");
   const [user, setUser] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorState, setErrorState] = useState(null);
   const searchDebounce = useDebounce(search, 500);
 
   //Поиск ввод
@@ -51,12 +54,14 @@ function App() {
   },[searchDebounce]);
 
   useEffect(()=>{
-    
+
    api.setProductsUser()
    .then(([productsData, userData])=>{
     setUser(userData);
     setCards(productsData.products);
-   });
+    setIsLoading(false);
+   })
+   .catch((err)=> setErrorState(err));
 
   },[])
 
@@ -64,19 +69,19 @@ function App() {
 
 
   return (
-    <UserContext.Provider value={{user, setSearch}}>
+    <GlobalContext.Provider value={{user, setSearch}}>
       <Header userData={user}>
         <Logo/>
         <Search onInput={onInput} onSubmit={onSubmit}/>
       </Header>
 
       <main className="main">
-        <CardContext.Provider value={{ cards, handleLike, setCards }}>
+        <PageContext.Provider value={{ cards, handleLike, setCards, setIsLoading, isLoading, errorState, setErrorState }}>
           <Routes>
 
             <Route path={ROUTELINKHOME} element={
               <div className={s.content}>
-                <CardList/>
+                 {isLoading ? <Spiner/>: <CardList/>} 
               </div>
 
             } />
@@ -86,18 +91,18 @@ function App() {
             }/>
 
             <Route path="*" element={
-              <NotFound setSearch={setSearch}/>
+              <NotFound setSearch={setSearch} error={errorState}/>
 
             }/>
 
           </Routes>
-        </CardContext.Provider>
+        </PageContext.Provider>
       </main>
 
       <Footer>
         <Logo/>
       </Footer>
-    </UserContext.Provider>
+    </GlobalContext.Provider>
   );
 }
 

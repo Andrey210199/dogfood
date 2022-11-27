@@ -5,19 +5,19 @@ import api from "../../Utilites/Api";
 import isLike from "../../Utilites/IsLike.js";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { UserContext } from "../../Context/UserContext";
-import { CardContext } from "../../Context/CardContext";
+import { GlobalContext } from "../../Context/GlobalContext";
+import { PageContext } from "../../Context/PageContext";
 import { productLike } from "../../Utilites/Product.js";
 import NotFound from "../NotFound/NotFound";
 
 
 export default function ProductPage() {
+    const { isLoading, setIsLoading, errorState, setErrorState, setCards, cards } = useContext(PageContext);
+    const {user} = useContext(GlobalContext);
+
     const { productId } = useParams();
     const [product, setProduct] = useState();
-    const [isLoading, setIsLoading] = useState(true);
-    const {user} = useContext(UserContext);
-    const {setCards, cards} = useContext(CardContext);
-    const [errorState, setErrorState] = useState(null);
+
 
     function handleLike(likes) {
         
@@ -30,15 +30,17 @@ export default function ProductPage() {
     }
 
     useEffect(() => {
+
+        setIsLoading(true);
+
         api.getProducts(productId)
             .then(product => {
                 setProduct(product);
-                setIsLoading(false);
             })
            .catch(err =>{
                 setErrorState(err);
-                setIsLoading(false);
-            });
+            })
+            .finally(()=> setIsLoading(false));
 
     }, []);
 

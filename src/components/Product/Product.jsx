@@ -3,12 +3,12 @@ import cn from "classnames";
 import s from "./index.module.css";
 import isLike from "../../Utilites/IsLike.js";
 import { createMarkup, scrollClear } from "../../Utilites/Product.js";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "../../Context/UserContext";
+import { GlobalContext } from "../../Context/GlobalContext";
 
 export default function Page({name, description, price, discount, likes, pictures, stock, tags, wight, _id: id, handleLike }){
-    const {user} = useContext(UserContext);
+    const {user} = useContext(GlobalContext);
     const discountPrice =  Math.round(price - price * discount/100);
     const like = likes && isLike(likes, user?._id);
     const descriptionHTML = createMarkup(description);

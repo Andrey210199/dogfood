@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { CardContext } from "../../Context/CardContext";
+import { PageContext } from "../../Context/PageContext";
 import NotFound from "../../Pages/NotFound/NotFound";
 import Card from "../Card/Card";
 import s from "./index.module.css";
 
 export default function CardList(){
 
-    const {cards: goods} = useContext(CardContext);
+    const {cards: goods} = useContext(PageContext);
     return( 
        
         <div className={s.cardList}>
