@@ -1,0 +1,18 @@
+.modal{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #100d0199;
+}
+
+.modal__content{
+    max-width: 1000px;
+    max-height: 1000px;
+    background: linear-gradient(#8b601b 2%,#FA9B00, #4e360f 98%);
+    padding: 20px;
+    border-radius: 20px;
+    z-index: 1;
+}

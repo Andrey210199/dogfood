@@ -47,7 +47,7 @@ export default function ProductPage() {
     return (
         <>
             {isLoading ? <Spiner /> :
-               !errorState && <Product {...product} handleLike ={handleLike}/>
+               !errorState && <Product {...product} handleLike ={handleLike} setProduct={setProduct}/>
             }
             {errorState && <NotFound error = {errorState}/>}
         </>

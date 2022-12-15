@@ -4,9 +4,7 @@ import NotFound from "../../Pages/NotFound/NotFound";
 import Card from "../Card/Card";
 import s from "./index.module.css";
 
-export default function CardList(){
-
-    const {cards: goods} = useContext(PageContext);
+export default function CardList({goods}){
     return( 
        
         <div className={s.cardList}>

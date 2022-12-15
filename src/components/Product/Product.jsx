@@ -6,15 +6,27 @@ import { createMarkup, scrollClear } from "../../Utilites/Product.js";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContext } from "../../Context/GlobalContext";
+import ContentHeader from "../ContentHeader/ContentHeader";
+import Rating from "../Rating/Rating";
+import { useMemo } from "react";
+import FormReview from "../FormReview/FormReview";
+import { useState } from "react";
+import { useEffect } from "react";
 
-export default function Page({name, description, price, discount, likes, pictures, stock, tags, wight, _id: id, handleLike }){
+export default function Page({name, description, price, discount, reviews, likes, pictures, stock, tags, wight, _id: id, handleLike, setProduct }){
     const {user} = useContext(GlobalContext);
+    const [review, setReview] = useState(reviews);
     const discountPrice =  Math.round(price - price * discount/100);
     const like = likes && isLike(likes, user?._id);
     const descriptionHTML = createMarkup(description);
     const navigate = useNavigate();
 
-    scrollClear();
+    const rating = useMemo(()=>Math.round(reviews?.reduce((acc, curr)=> acc+=curr.rating, 0)/reviews?.length), [reviews]);
+
+    useEffect(()=>{
+        scrollClear();
+    },[])
+
 
     function handleClickLike(){
         handleLike(likes);
@@ -23,9 +35,10 @@ export default function Page({name, description, price, discount, likes, picture
     return(
         <div className="main__content">
             <div className="title">
-                <a href="#" className={ cn(s.title__link, "btn")} onClick={()=> navigate(-1)}>Назад</a>
-                <h1>{name}</h1>
+                <ContentHeader title={name}>
+                <span><Rating rating={rating}/> {!!rating ? rating : 0} </span>
                 <span>Артикул: <b>{wight}</b></span>
+                </ContentHeader>
             </div>
 
             <div className={s.product}>
@@ -107,6 +120,12 @@ export default function Page({name, description, price, discount, likes, picture
 				</div>
 			</div>
             
+            <div className={s.review}>
+                <FormReview title={`Отзыв о ${name}`}  productId={id} setReview={setReview} setProduct={setProduct}/>
+                <ul className={s.comments}>
+                    {reviews?.map(comment => <li key={comment._id} className={s.comment}> <Rating rating={comment.rating}/> {comment.text}</li>)}
+                </ul>
+            </div>
 
         </div>
     )

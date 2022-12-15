@@ -1,0 +1,12 @@
+.rating__img{
+    width: 25px;
+    fill: gray;
+}
+
+.isEditable{
+    pointer-events: none;
+}
+
+.rating__img_active{
+    fill: #fb9000;
+}

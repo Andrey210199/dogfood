@@ -1,5 +1,7 @@
 import cn from "classnames";
 import React from "react";
+import { Link } from "react-router-dom";
+import { ROUTELINKFAQ } from "../../Constant/Constant";
 
 import "./index.css";
 
@@ -26,7 +28,7 @@ export default function Footer({children}){
                     <a href="#" className="footer__link">Акции</a>
                     <a href="#" className="footer__link">Новост и Отзывы</a>
                     <a href="#" className="footer__link">Оплата и доставка</a>
-                    <a href="#" className="footer__link">Часто спрашивают</a>
+                    <Link to={ROUTELINKFAQ} className="footer__link">Часто спрашивают</Link>
                     <a href="#" className="footer__link">Обратная связь</a>
                     <a href="#" className="footer__link">Контакты</a>
 

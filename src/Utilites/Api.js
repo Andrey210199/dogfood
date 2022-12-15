@@ -1,3 +1,4 @@
+import { json } from "react-router-dom";
 
  class Api{
     constructor({baseUrl, headers}){
@@ -45,6 +46,15 @@
             method: "GET",
             headers: this._headers
         }).then(this._onResponse);
+    }
+
+    setReview(dataComment, productId, reviewId =""){
+        return fetch(`${this._url}/products/review/${productId}/${reviewId && reviewId}`,{
+            method: reviewId==="" ?"POST": "DELETE",
+            headers: this._headers,
+            body: JSON.stringify(dataComment)
+        }).then(this._onResponse);
+
     }
 }
 

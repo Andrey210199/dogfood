@@ -10,18 +10,24 @@ import { Route, Routes } from 'react-router-dom';
 
 import useDebounce from '../../Hooks/UseDebounce';
 
-import { productLike } from "../../Utilites/Product.js";
+import { productFilter, productLike } from "../../Utilites/Product.js";
 import { GlobalContext } from "../../Context/GlobalContext.js";
 import { PageContext } from "../../Context/PageContext.js";
 import ProductPage from '../../Pages/Product-page/ProductPage';
 import NotFound from '../../Pages/NotFound/NotFound';
+import Spiner from '../Spiner/Spiner';
+import FAQPage from '../../Pages/FAQPage/FAQPage';
+import FavoritePage from '../../Pages/FavoritePage/FavoritePage';
 
 import api from '../../Utilites/Api';
 import isLike from '../../Utilites/IsLike';
-import {ROUTELINKHOME, ROUTELINKPRODUCT} from "../../Constant/Constant.js";
+import {ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKHOME, ROUTELINKPRODUCT} from "../../Constant/Constant.js";
 
 import s from './index.module.css';
-import Spiner from '../Spiner/Spiner';
+import Login from '../Login/Login';
+import Registration from '../Registration/Registration';
+import ResetPassword from '../ResetPassword/ResetPassword';
+
 
 function App() {
 
@@ -30,6 +36,7 @@ function App() {
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [errorState, setErrorState] = useState(null);
+  const [favorites, setFavorites] = useState([]);
   const searchDebounce = useDebounce(search, 500);
 
   //Поиск ввод
@@ -38,10 +45,17 @@ function App() {
   }
 
   function handleLike(id,likes){
-    let like = isLike(likes, user?._id);
+    const like = isLike(likes, user?._id);
     api.checkLike(id, like)
     .then((newCard)=> {
       productLike(cards, newCard, setCards);
+      if(!like){
+        setFavorites([...favorites, newCard])
+      }
+      else{
+        setFavorites(favorit=> productFilter(favorit, newCard, (item, newCard)=>item._id !== newCard._id) )
+      }
+
     })
   }
 
@@ -59,9 +73,11 @@ function App() {
    .then(([productsData, userData])=>{
     setUser(userData);
     setCards(productsData.products);
-    setIsLoading(false);
+    const favor = productFilter(productsData.products, userData, (item, user)=>isLike(item.likes, user._id));
+    setFavorites(favor);
    })
-   .catch((err)=> setErrorState(err));
+   .catch((err)=> setErrorState(err))
+   .finally(()=> setIsLoading(false));
 
   },[])
 
@@ -70,24 +86,36 @@ function App() {
 
   return (
     <GlobalContext.Provider value={{user, setSearch}}>
-      <Header userData={user}>
+      <Header userData={user} favorites={favorites}>
         <Logo/>
         <Search onInput={onInput} onSubmit={onSubmit}/>
       </Header>
 
+      <Login/>
+      <Registration/>
+      <ResetPassword/>
+      
       <main className="main">
         <PageContext.Provider value={{ cards, handleLike, setCards, setIsLoading, isLoading, errorState, setErrorState }}>
           <Routes>
 
             <Route path={ROUTELINKHOME} element={
               <div className={s.content}>
-                 {isLoading ? <Spiner/>: <CardList/>} 
+                 {isLoading ? <Spiner/>: <CardList goods={cards}/>} 
               </div>
 
             } />
 
             <Route path={`${ROUTELINKPRODUCT}:productId`} element={
               <ProductPage/>
+            }/>
+
+            <Route path={ROUTELINKFAVORITES} element={
+              <FavoritePage favorites={favorites.reverse()}/>
+            }/>
+
+            <Route path={ROUTELINKFAQ} element={ 
+              <FAQPage/>
             }/>
 
             <Route path="*" element={
