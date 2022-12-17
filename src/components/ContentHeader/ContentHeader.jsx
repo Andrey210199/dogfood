@@ -1,5 +1,4 @@
 import cn from "classnames";
-import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import s from "./index.module.css";

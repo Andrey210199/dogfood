@@ -1,20 +1,19 @@
-import { useForm } from "react-hook-form";
-import { useHref, useNavigate, useSearchParams } from "react-router-dom";
-import Form from "../Form/Form";
-import FormInput from "../FormInput/FormInput";
 import Modal from "../Modal/Modal";
-import { FORMOBJECT } from "../../Constant/Constant";
+import Form from "../Form/Form";
 import s from "./index.module.css";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import FormInput from "../FormInput/FormInput";
+import { FORMOBJECT } from "../../Constant/Constant";
 
-export default function Registration() {
+export default function Authorization({ openUrl, children }) {
 
     const [url, setUrl] = useSearchParams();
-    const href = useHref();
     const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors } } = useForm({ mode: "onBlur" });
 
-    const {required: requiredRegister, email: emailRegister, password: passwordRegister}= FORMOBJECT;
+    const { required: requiredRegister, email: emailRegister, password: passwordRegister } = FORMOBJECT;
 
     const email = register("email", {
         required: {
@@ -40,21 +39,21 @@ export default function Registration() {
 
     //Добавить запрос на сервер
     function handleFormSubmit(e) {
+        navigate(-1);
     }
 
     return (
-        url.get("registration") &&
+        url.get(openUrl) &&
         <Modal>
-            <Form title="Регистрация" handleSubmit={handleSubmit(handleFormSubmit)}>
+            <Form title="Вход" handleSubmit={handleSubmit(handleFormSubmit)}>
+
                 <FormInput {...email} type="email" placeholder="Введите email" />
                 {errors?.email && <p className={s.error}>{errors.email.message}</p>}
 
                 <FormInput {...password} type="password" placeholder="Введите пароль" />
                 {errors?.password && <p className={s.error}>{errors.password.message}</p>}
 
-                <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
-                <button>Зарегистрироваться</button>
-                <button type="button" onClick={() => navigate(href + "?login=true", {replace: true})}>Вход</button>
+                {children}
             </Form>
         </Modal>
     )

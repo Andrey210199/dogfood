@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import { PageContext } from "../../Context/PageContext";
 import NotFound from "../../Pages/NotFound/NotFound";
 import Card from "../Card/Card";
 import s from "./index.module.css";

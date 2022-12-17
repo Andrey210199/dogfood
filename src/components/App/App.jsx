@@ -1,12 +1,12 @@
-import  Header from '../Header/Header';
-import  Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import CardList from '../CardList/CardList';
-import  Logo from '../Logo/Logo';
-import  Search from '../Search/Search';
+import Logo from '../Logo/Logo';
+import Search from '../Search/Search';
 
 import { onRequest, onSubmit } from '../../Utilites/Search';
 import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useHref, useNavigate } from 'react-router-dom';
 
 import useDebounce from '../../Hooks/UseDebounce';
 
@@ -21,114 +21,128 @@ import FavoritePage from '../../Pages/FavoritePage/FavoritePage';
 
 import api from '../../Utilites/Api';
 import isLike from '../../Utilites/IsLike';
-import {ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKHOME, ROUTELINKPRODUCT} from "../../Constant/Constant.js";
+import { ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKHOME, ROUTELINKPRODUCT } from "../../Constant/Constant.js";
 
 import s from './index.module.css';
-import Login from '../Login/Login';
-import Registration from '../Registration/Registration';
+import Authorization from '../Authorization/Authorization';
 import ResetPassword from '../ResetPassword/ResetPassword';
 
 
 function App() {
 
-  const [cards, setCards]= useState([]);
-  const [search,setSearch] = useState("");
+  const [cards, setCards] = useState([]);
+  const [search, setSearch] = useState("");
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [errorState, setErrorState] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const searchDebounce = useDebounce(search, 500);
+  const navigate = useNavigate();
+  const href = useHref();
 
   //Поиск ввод
-  function onInput(inputValue){
+  function onInput(inputValue) {
     setSearch(inputValue);
   }
 
-  function handleLike(id,likes){
+  function handleLike(id, likes) {
     const like = isLike(likes, user?._id);
     api.checkLike(id, like)
-    .then((newCard)=> {
-      productLike(cards, newCard, setCards);
-      if(!like){
-        setFavorites([...favorites, newCard])
-      }
-      else{
-        setFavorites(favorit=> productFilter(favorit, newCard, (item, newCard)=>item._id !== newCard._id) )
-      }
+      .then((newCard) => {
+        productLike(cards, newCard, setCards);
+        if (!like) {
+          setFavorites([...favorites, newCard])
+        }
+        else {
+          setFavorites(favorit => productFilter(favorit, newCard, (item, newCard) => item._id !== newCard._id))
+        }
 
-    })
+      })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     onRequest(searchDebounce)
-    .then((searchRes)=>{
-      setCards(searchRes);
-    });
+      .then((searchRes) => {
+        setCards(searchRes);
+      });
 
-  },[searchDebounce]);
+  }, [searchDebounce]);
 
-  useEffect(()=>{
+  useEffect(() => {
 
-   api.setProductsUser()
-   .then(([productsData, userData])=>{
-    setUser(userData);
-    setCards(productsData.products);
-    const favor = productFilter(productsData.products, userData, (item, user)=>isLike(item.likes, user._id));
-    setFavorites(favor);
-   })
-   .catch((err)=> setErrorState(err))
-   .finally(()=> setIsLoading(false));
+    api.setProductsUser()
+      .then(([productsData, userData]) => {
+        setUser(userData);
+        setCards(productsData.products);
+        const favor = productFilter(productsData.products, userData, (item, user) => isLike(item.likes, user._id));
+        setFavorites(favor);
+      })
+      .catch((err) => setErrorState(err))
+      .finally(() => setIsLoading(false));
 
-  },[])
+  }, [])
 
 
 
 
   return (
-    <GlobalContext.Provider value={{user, setSearch}}>
+    <GlobalContext.Provider value={{ user, setSearch }}>
       <Header userData={user} favorites={favorites}>
-        <Logo/>
-        <Search onInput={onInput} onSubmit={onSubmit}/>
+        <Logo />
+        <Search onInput={onInput} onSubmit={onSubmit} />
       </Header>
 
-      <Login/>
-      <Registration/>
-      <ResetPassword/>
-      
+      {/* Модальные окна */}
+      <Authorization openUrl={"login"}>
+
+        <p className={s.link} onClick={() => { navigate(href + "?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
+        <button>Вход</button>
+        <button type="button" onClick={() => { navigate(href + "?registration=true", { replace: true }) }}>Регистрация</button>
+
+      </Authorization>
+
+      <Authorization openUrl={"registration"}>
+        <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
+        <button>Зарегистрироваться</button>
+        <button type="button" onClick={() => navigate(href + "?login=true", { replace: true })}>Вход</button>
+      </Authorization>
+
+      <ResetPassword />
+
       <main className="main">
         <PageContext.Provider value={{ cards, handleLike, setCards, setIsLoading, isLoading, errorState, setErrorState }}>
           <Routes>
 
             <Route path={ROUTELINKHOME} element={
               <div className={s.content}>
-                 {isLoading ? <Spiner/>: <CardList goods={cards}/>} 
+                {isLoading ? <Spiner /> : <CardList goods={cards} />}
               </div>
 
             } />
 
             <Route path={`${ROUTELINKPRODUCT}:productId`} element={
-              <ProductPage/>
-            }/>
+              <ProductPage />
+            } />
 
             <Route path={ROUTELINKFAVORITES} element={
-              <FavoritePage favorites={favorites.reverse()}/>
-            }/>
+              <FavoritePage favorites={favorites.reverse()} />
+            } />
 
-            <Route path={ROUTELINKFAQ} element={ 
-              <FAQPage/>
-            }/>
+            <Route path={ROUTELINKFAQ} element={
+              <FAQPage />
+            } />
 
             <Route path="*" element={
-              <NotFound setSearch={setSearch} error={errorState}/>
+              <NotFound setSearch={setSearch} error={errorState} />
 
-            }/>
+            } />
 
           </Routes>
         </PageContext.Provider>
       </main>
 
       <Footer>
-        <Logo/>
+        <Logo />
       </Footer>
     </GlobalContext.Provider>
   );

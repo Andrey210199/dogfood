@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import api from "../../Utilites/Api";
@@ -7,11 +6,10 @@ import FormInput from "../FormInput/FormInput";
 import Rating from "../Rating/Rating";
 import s from "./index.module.css";
 
-export default function FormReview({title="Отзыв о товаре", productId, setProduct}){
+export default function FormReview({ title = "Отзыв о товаре", productId, setProduct }) {
 
     const [rating, setRating] = useState(1);
-    const [inputText, setInputText] = useState("");
-    const {register, handleSubmit, formState: {errors}} = useForm({mode: "onBlur"});
+    const { register, handleSubmit, formState: { errors } } = useForm({ mode: "onBlur" });
 
     const comment = register("text", {
         required: {
@@ -20,20 +18,21 @@ export default function FormReview({title="Отзыв о товаре", productI
         }
     })
 
-    function handleFormSubmit(text){
-        api.setReview({...text, rating}, productId)
-        .then((comment)=>{
-            setProduct(comment);
-            setInputText("");
-        });
+    function handleFormSubmit(text) {
+        api.setReview({ ...text, rating }, productId)
+            .then((comment) => {
+                setProduct(comment);
+            });
     }
 
 
 
-    return(
-        <Form title={title} handleSubmit ={handleSubmit(handleFormSubmit)}>
-            <Rating rating={rating} setRating={setRating} isEditable/>
-            <FormInput {...comment} type_input="textarea" placeholder ="Введите текст отзыва." setInputText={setInputText} inputText={inputText}/>
+
+    return (
+        <Form handleSubmit={handleSubmit(handleFormSubmit)}>
+            <h3>{title}</h3>
+            <Rating rating={rating} setRating={setRating} isEditable />
+            <FormInput {...comment} type_input="textarea" placeholder="Введите текст отзыва." />
             {errors?.comment && <p className={s.error}>{errors.comment.message}</p>}
             <button>Отправить</button>
         </Form>

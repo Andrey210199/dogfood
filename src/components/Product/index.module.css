@@ -47,3 +47,7 @@
     flex-direction: column;
     row-gap: 5px;
 }
+
+.review{
+    max-width: 1000px;
+}
