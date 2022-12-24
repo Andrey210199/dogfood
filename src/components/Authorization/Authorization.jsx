@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import FormInput from "../FormInput/FormInput";
 import { FORMOBJECT } from "../../Constant/Constant";
 
-export default function Authorization({ openUrl, children }) {
+export default function Authorization({ openUrl, title, children }) {
 
     const [url, setUrl] = useSearchParams();
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ export default function Authorization({ openUrl, children }) {
     return (
         url.get(openUrl) &&
         <Modal>
-            <Form title="Вход" handleSubmit={handleSubmit(handleFormSubmit)}>
+            <Form title={title} handleSubmit={handleSubmit(handleFormSubmit)}>
 
                 <FormInput {...email} type="email" placeholder="Введите email" />
                 {errors?.email && <p className={s.error}>{errors.email.message}</p>}

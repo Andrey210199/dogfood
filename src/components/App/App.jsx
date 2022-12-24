@@ -3,97 +3,64 @@ import Footer from '../Footer/Footer';
 import CardList from '../CardList/CardList';
 import Logo from '../Logo/Logo';
 import Search from '../Search/Search';
+import Authorization from '../Authorization/Authorization';
+import ResetPassword from '../ResetPassword/ResetPassword';
 
-import { onRequest, onSubmit } from '../../Utilites/Search';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Route, Routes, useHref, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useDebounce from '../../Hooks/UseDebounce';
 
-import { productFilter, productLike } from "../../Utilites/Product.js";
-import { GlobalContext } from "../../Context/GlobalContext.js";
-import { PageContext } from "../../Context/PageContext.js";
 import ProductPage from '../../Pages/Product-page/ProductPage';
 import NotFound from '../../Pages/NotFound/NotFound';
 import Spiner from '../Spiner/Spiner';
 import FAQPage from '../../Pages/FAQPage/FAQPage';
 import FavoritePage from '../../Pages/FavoritePage/FavoritePage';
 
-import api from '../../Utilites/Api';
-import isLike from '../../Utilites/IsLike';
 import { ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKHOME, ROUTELINKPRODUCT } from "../../Constant/Constant.js";
+import { fetchGetUser } from '../../Storage/Slices/UserSlice';
+import { fetchProducts, fetchSearch } from '../../Storage/Slices/ProductsSlice';
 
 import s from './index.module.css';
-import Authorization from '../Authorization/Authorization';
-import ResetPassword from '../ResetPassword/ResetPassword';
 
 
-function App() {
+export default function App() {
 
-  const [cards, setCards] = useState([]);
-  const [search, setSearch] = useState("");
-  const [user, setUser] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorState, setErrorState] = useState(null);
-  const [favorites, setFavorites] = useState([]);
+  const { data: cards, loading: isLoading, error: errorState, search } = useSelector(state => state.products);
   const searchDebounce = useDebounce(search, 500);
   const navigate = useNavigate();
   const href = useHref();
+  const dispatch = useDispatch();
+
+  function onRequest(searchDebounce) {
+    return dispatch(fetchSearch(searchDebounce));
+  }
 
   //Поиск ввод
-  function onInput(inputValue) {
-    setSearch(inputValue);
-  }
-
-  function handleLike(id, likes) {
-    const like = isLike(likes, user?._id);
-    api.checkLike(id, like)
-      .then((newCard) => {
-        productLike(cards, newCard, setCards);
-        if (!like) {
-          setFavorites([...favorites, newCard])
-        }
-        else {
-          setFavorites(favorit => productFilter(favorit, newCard, (item, newCard) => item._id !== newCard._id))
-        }
-
-      })
-  }
-
   useEffect(() => {
-    onRequest(searchDebounce)
-      .then((searchRes) => {
-        setCards(searchRes);
-      });
+
+    if (searchDebounce !== null)
+      onRequest(searchDebounce);
 
   }, [searchDebounce]);
 
   useEffect(() => {
-
-    api.setProductsUser()
-      .then(([productsData, userData]) => {
-        setUser(userData);
-        setCards(productsData.products);
-        const favor = productFilter(productsData.products, userData, (item, user) => isLike(item.likes, user._id));
-        setFavorites(favor);
+    dispatch(fetchGetUser())
+      .then(() => {
+        dispatch(fetchProducts());
       })
-      .catch((err) => setErrorState(err))
-      .finally(() => setIsLoading(false));
-
-  }, [])
-
-
-
+  }, [dispatch])
 
   return (
-    <GlobalContext.Provider value={{ user, setSearch }}>
-      <Header userData={user} favorites={favorites}>
+    <>
+      <Header>
         <Logo />
-        <Search onInput={onInput} onSubmit={onSubmit} />
+        <Search />
       </Header>
 
       {/* Модальные окна */}
-      <Authorization openUrl={"login"}>
+      <Authorization openUrl={"login"} title="Вход">
 
         <p className={s.link} onClick={() => { navigate(href + "?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
         <button>Вход</button>
@@ -101,7 +68,7 @@ function App() {
 
       </Authorization>
 
-      <Authorization openUrl={"registration"}>
+      <Authorization openUrl={"registration"} title="Регистрация">
         <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
         <button>Зарегистрироваться</button>
         <button type="button" onClick={() => navigate(href + "?login=true", { replace: true })}>Вход</button>
@@ -110,42 +77,38 @@ function App() {
       <ResetPassword />
 
       <main className="main">
-        <PageContext.Provider value={{ cards, handleLike, setCards, setIsLoading, isLoading, errorState, setErrorState }}>
-          <Routes>
+        <Routes>
 
-            <Route path={ROUTELINKHOME} element={
-              <div className={s.content}>
-                {isLoading ? <Spiner /> : <CardList goods={cards} />}
-              </div>
+          <Route path={ROUTELINKHOME} element={
+            <div className={s.content}>
+              {isLoading ? <Spiner /> : <CardList goods={cards} />}
+            </div>
 
-            } />
+          } />
 
-            <Route path={`${ROUTELINKPRODUCT}:productId`} element={
-              <ProductPage />
-            } />
+          <Route path={`${ROUTELINKPRODUCT}:productId`} element={
+            <ProductPage />
+          } />
 
-            <Route path={ROUTELINKFAVORITES} element={
-              <FavoritePage favorites={favorites.reverse()} />
-            } />
+          <Route path={ROUTELINKFAVORITES} element={
+            <FavoritePage />
+          } />
 
-            <Route path={ROUTELINKFAQ} element={
-              <FAQPage />
-            } />
+          <Route path={ROUTELINKFAQ} element={
+            <FAQPage />
+          } />
 
-            <Route path="*" element={
-              <NotFound setSearch={setSearch} error={errorState} />
+          <Route path="*" element={
+            <NotFound error={errorState} />
 
-            } />
+          } />
 
-          </Routes>
-        </PageContext.Provider>
+        </Routes>
       </main>
 
       <Footer>
         <Logo />
       </Footer>
-    </GlobalContext.Provider>
+    </>
   );
 }
-
-export default App;

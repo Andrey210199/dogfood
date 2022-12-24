@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import api from "../../Utilites/Api";
+import { useDispatch } from "react-redux";
+import { INITIALRATING } from "../../Constant/Constant";
+import { fetchRewiew } from "../../Storage/Slices/SingleProductSlice";
 import Form from "../Form/Form";
 import FormInput from "../FormInput/FormInput";
 import Rating from "../Rating/Rating";
 import s from "./index.module.css";
 
-export default function FormReview({ title = "Отзыв о товаре", productId, setProduct }) {
+export default function FormReview({ title = "Отзыв о товаре", productId }) {
 
-    const [rating, setRating] = useState(1);
-    const { register, handleSubmit, formState: { errors } } = useForm({ mode: "onBlur" });
+    const [rating, setRating] = useState(INITIALRATING);
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: "onBlur" });
+    const dispatch = useDispatch();
 
     const comment = register("text", {
         required: {
@@ -19,9 +22,10 @@ export default function FormReview({ title = "Отзыв о товаре", produ
     })
 
     function handleFormSubmit(text) {
-        api.setReview({ ...text, rating }, productId)
-            .then((comment) => {
-                setProduct(comment);
+        dispatch(fetchRewiew({ productId, body: { ...text, rating } }))
+            .then(() => {
+                reset();
+                setRating(INITIALRATING);
             });
     }
 
