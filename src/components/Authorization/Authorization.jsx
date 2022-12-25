@@ -5,40 +5,43 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import FormInput from "../FormInput/FormInput";
 import { FORMOBJECT } from "../../Constant/Constant";
+import { useDispatch } from "react-redux";
 
-export default function Authorization({ openUrl, title, children }) {
+export default function Authorization({ openUrl, title, method, children }) {
 
-    const [url, setUrl] = useSearchParams();
+    const [url] = useSearchParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const { register, handleSubmit, formState: { errors } } = useForm({ mode: "onBlur" });
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: "onBlur" });
 
-    const { required: requiredRegister, email: emailRegister, password: passwordRegister } = FORMOBJECT;
+    const { required: requiredForm, email: emailForm, password: passwordFrom } = FORMOBJECT;
 
     const email = register("email", {
         required: {
             value: true,
-            message: requiredRegister
+            message: requiredForm
         },
         pattern: {
-            value: emailRegister.pattern,
-            message: emailRegister.message
+            value: emailForm.pattern,
+            message: emailForm.message
         }
     });
 
     const password = register("password", {
         required: {
             value: true,
-            message: requiredRegister
+            message: requiredForm
         },
         pattern: {
-            value: passwordRegister.pattern,
-            message: passwordRegister.message
+            value: passwordFrom.pattern,
+            message: passwordFrom.message
         }
     });
 
-    //Добавить запрос на сервер
-    function handleFormSubmit(e) {
+    function handleFormSubmit(data) {
+        dispatch(method(data));
+        reset();
         navigate(-1);
     }
 

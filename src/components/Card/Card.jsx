@@ -8,6 +8,7 @@ import { ROUTELINKPRODUCT } from "../../Constant/Constant.js";
 import { fetchChangeLike } from "../../Storage/Slices/ProductsSlice";
 
 import "./styles.css";
+import { getCookie } from "../../Utilites/Cookie";
 
 
 
@@ -35,9 +36,9 @@ export default function Card(props) {
 
                 <div className="card__sticky_right">
 
-                    <button className={cn("card__favorite", { "card__favorite_active": like })} onClick={handleClickLike}>
+                    {getCookie("token") && <button className={cn("card__favorite", { "card__favorite_active": like})} onClick={handleClickLike}>
                         <span className="card__favorite-icon"> ♥</span>
-                    </button>
+                    </button>}
                 </div>
 
             </div>
@@ -53,7 +54,7 @@ export default function Card(props) {
 
             </Link>
 
-            <a href="#" className="card__cart btn">В корзину</a>
+            <a href="/#" className="card__cart btn">В корзину</a>
         </div>
     )
 }

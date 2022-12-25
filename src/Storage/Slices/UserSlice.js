@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { USERSTATENAME } from "../../Constant/StoreConstant";
-import { setCookie } from "../../Utilites/Cookie";
+import { deleteCookie, getCookie, setCookie } from "../../Utilites/Cookie";
 import { isError } from "../../Utilites/StoreFunctions";
 
 const initialState = {
@@ -35,12 +35,11 @@ export const fetchUserAutch = createAsyncThunk(
         try {
 
             const data = await api.authorize(body);
-
             if (data.token) {
-
                 const cookie_date = new Date();
                 cookie_date.setMonth(cookie_date.getMonth() + 1);
                 document.cookie = setCookie("token", data.token, { "max-age": cookie_date.toUTCString() });
+                console.log(getCookie("token"))
             }
             else {
                 return rejectWithValue(data);
@@ -81,19 +80,26 @@ export const fetchRegistration = createAsyncThunk(
 
         try {
 
-            const data = api.register(body);
+            const data = api.register({ ...body, group: "group-7" });
             return fulfillWithValue(data)
 
         } catch (error) {
             return rejectWithValue(error);
         }
     }
-)
+);
+
+export function unAutch() {
+    deleteCookie("token");
+    fetchGetUser();
+}
+
+
 
 const userSlice = createSlice({
     name: USERSTATENAME,
     initialState,
-    reducer: {
+    reducers: {
         authCheck: state => {
             state.isAutchCheck = true;
         }
@@ -104,8 +110,12 @@ const userSlice = createSlice({
             state.error = null;
             state.isAutchCheck = false;
         })
+            .addCase(fetchTokenCheck.pending, state => {
+                state.isAutchCheck = false;
+            })
             .addCase(fetchGetUser.fulfilled, (state, action) => {
                 state.data = action.payload;
+                state.isAutchCheck = true;
                 state.loading = false;
 
             })
@@ -114,9 +124,11 @@ const userSlice = createSlice({
             })
             .addCase(fetchUserAutch.fulfilled, (state, action) => {
                 state.data = action.payload;
+                state.isAutchCheck = true;
                 state.loading = false;
             })
-            .addCase(fetchTokenCheck.fulfilled, state => {
+            .addCase(fetchTokenCheck.fulfilled, (state, action) => {
+                state.data = action.payload;
                 state.isAutchCheck = true;
                 state.loading = false;
             })

@@ -19,15 +19,18 @@ import FAQPage from '../../Pages/FAQPage/FAQPage';
 import FavoritePage from '../../Pages/FavoritePage/FavoritePage';
 
 import { ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKHOME, ROUTELINKPRODUCT } from "../../Constant/Constant.js";
-import { fetchGetUser } from '../../Storage/Slices/UserSlice';
+import { fetchGetUser, fetchUserAutch, fetchRegistration, fetchTokenCheck } from '../../Storage/Slices/UserSlice';
 import { fetchProducts, fetchSearch } from '../../Storage/Slices/ProductsSlice';
 
 import s from './index.module.css';
+import ProtectedRouter from '../ProtectedRouter/ProtectedRouter';
+import { getCookie } from '../../Utilites/Cookie';
 
 
 export default function App() {
 
   const { data: cards, loading: isLoading, error: errorState, search } = useSelector(state => state.products);
+  const token = getCookie("token");
   const searchDebounce = useDebounce(search, 500);
   const navigate = useNavigate();
   const href = useHref();
@@ -46,11 +49,25 @@ export default function App() {
   }, [searchDebounce]);
 
   useEffect(() => {
-    dispatch(fetchGetUser())
+
+    if (token) {
+      console.log(token);
+      dispatch(fetchTokenCheck(token))
       .then(() => {
-        dispatch(fetchProducts());
+        dispatch(fetchGetUser())
+          .then(() => {
+            dispatch(fetchProducts());
+          })
       })
-  }, [dispatch])
+    }
+    else {
+      dispatch(fetchGetUser())
+        .then(() => {
+          dispatch(fetchProducts());
+        })
+    }
+
+  }, [dispatch, token])
 
   return (
     <>
@@ -59,22 +76,26 @@ export default function App() {
         <Search />
       </Header>
 
-      {/* Модальные окна */}
-      <Authorization openUrl={"login"} title="Вход">
+      <ProtectedRouter>
 
-        <p className={s.link} onClick={() => { navigate(href + "?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
-        <button>Вход</button>
-        <button type="button" onClick={() => { navigate(href + "?registration=true", { replace: true }) }}>Регистрация</button>
+        {/* Модальные окна */}
+        <Authorization openUrl={"login"} title="Вход" method={fetchUserAutch}>
 
-      </Authorization>
+          <p className={s.link} onClick={() => { navigate(href + "?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
+          <button>Вход</button>
+          <button type="button" onClick={() => { navigate(href + "?registration=true", { replace: true }) }}>Регистрация</button>
 
-      <Authorization openUrl={"registration"} title="Регистрация">
-        <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
-        <button>Зарегистрироваться</button>
-        <button type="button" onClick={() => navigate(href + "?login=true", { replace: true })}>Вход</button>
-      </Authorization>
+        </Authorization>
 
-      <ResetPassword />
+        <Authorization openUrl={"registration"} title="Регистрация" method={fetchRegistration}>
+          <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
+          <button>Зарегистрироваться</button>
+          <button type="button" onClick={() => navigate(href + "?login=true", { replace: true })}>Вход</button>
+        </Authorization>
+
+        <ResetPassword />
+
+      </ProtectedRouter>
 
       <main className="main">
         <Routes>

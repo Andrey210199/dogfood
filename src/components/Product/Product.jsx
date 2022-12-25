@@ -7,11 +7,11 @@ import ContentHeader from "../ContentHeader/ContentHeader";
 import Rating from "../Rating/Rating";
 import { useMemo } from "react";
 import FormReview from "../FormReview/FormReview";
-import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChangeLike } from "../../Storage/Slices/ProductsSlice";
 import { setProductState } from "../../Storage/Slices/SingleProductSlice";
+import { getCookie } from "../../Utilites/Cookie";
 
 export default function Page() {
     const user = useSelector(state => state.user.data);
@@ -52,7 +52,7 @@ export default function Page() {
                         </div>
                     }
 
-                    <img src={pictures} />
+                    <img src={pictures} alt="Изображение товара" />
                 </div>
 
                 <div className={s.product_right}>
@@ -66,9 +66,9 @@ export default function Page() {
                         <button className="btn plus">+</button>
                     </div>
 
-                    <button className={cn("card__favorite", { "card__favorite_active": like })} onClick={handleClickLike}>
+                    {getCookie("token") && <button className={cn("card__favorite", { "card__favorite_active": like })} onClick={handleClickLike}>
                         <span className="card__favorite-icon"> ♥</span>
-                    </button>
+                    </button>}
 
                     <div className={s.delivery}>
                         <img src="#" alt="truck" />

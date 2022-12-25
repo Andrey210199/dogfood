@@ -1,4 +1,4 @@
-import { json } from "react-router-dom";
+import { getCookie } from "./Cookie";
 
 class Api {
     constructor({ baseUrl, headers }) {
@@ -7,24 +7,24 @@ class Api {
     }
 
     _onResponse = (res) => {
-        return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
+        return res.ok ? res.json() : res.json().then(error => Promise.reject(error));
     }
 
     getProducts(idProduct ="") {
         return fetch(`${this._url}/products${idProduct && `/${idProduct}`}`, {
             method: "GET",
-            headers: this._headers
+            headers:{...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
         }).then(this._onResponse);
     }
 
     userInfo(dataUser) {
         return fetch(`${this._url}/users/me`, !!dataUser ? {
             method: "PATH",
-            headers: this._headers,
+            headers:{...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization},
             body: JSON.stringify(dataUser)
         } : {
             method: "GET",
-            headers: this._headers
+            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
         }
         ).then(this._onResponse);
     }
@@ -37,49 +37,49 @@ class Api {
     checkLike(productId, islike) {
         return fetch(`${this._url}/products/likes/${productId}`, {
             method: islike ? "DELETE" : "PUT",
-            headers: this._headers
+            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
         }).then(this._onResponse);
     }
 
     search(searchQuery) {
         return fetch(`${this._url}/products/search?query=${searchQuery}`, {
             method: "GET",
-            headers: this._headers
+            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
         }).then(this._onResponse);
     }
 
     setReview(dataComment, productId, reviewId = "") {
         return fetch(`${this._url}/products/review/${productId}/${reviewId && reviewId}`, {
             method: reviewId === "" ? "POST" : "DELETE",
-            headers: this._headers,
+            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization},
             body: JSON.stringify(dataComment)
         }).then(this._onResponse);
 
     }
 
     register(data) {
-        return fetch(`${this._baseUrl}/signup`, {
-            method: "PATCH",
+        return fetch(`${this._url}/signup`, {
+            method: "POST",
             headers: this._headers,
             body: JSON.stringify(data)
-        }).then(this._onResponce);
+        }).then(this._onResponse);
 
     }
 
     authorize(data) {
-        return fetch(`${this._baseUrl}/signin`, {
-            method: "PATCH",
-            headers: this._headers,
+        return fetch(`${this._url}/signin`, {
+            method: "POST",
+            headers:{...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization},
             body: JSON.stringify(data)
-        }).then(this._onResponce);
+        }).then(this._onResponse);
 
     }
 
     checkToken(token) {
-        return fetch(`${this._baseUrl}/users/me`, {
+        return fetch(`${this._url}/users/me`, {
             method: "GET",
-            headers: { ...this._headers, Authorization: `Bearer ${token}` }
-        }).then(this._onResponce);
+            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
+        }).then(this._onResponse);
     }
 }
 
