@@ -40,6 +40,17 @@ export default function App() {
     return dispatch(fetchSearch(searchDebounce));
   }
 
+  function logined(data){
+    dispatch(fetchUserAutch(data))
+    .then(()=>{
+      dispatch(fetchProducts())
+    })
+  }
+
+  function register(data){
+      dispatch(fetchRegistration(data));
+  }
+
   //Поиск ввод
   useEffect(() => {
 
@@ -51,7 +62,6 @@ export default function App() {
   useEffect(() => {
 
     if (token) {
-      console.log(token);
       dispatch(fetchTokenCheck(token))
       .then(() => {
         dispatch(fetchGetUser())
@@ -79,7 +89,7 @@ export default function App() {
       <ProtectedRouter>
 
         {/* Модальные окна */}
-        <Authorization openUrl={"login"} title="Вход" method={fetchUserAutch}>
+        <Authorization openUrl={"login"} title="Вход" method={logined}>
 
           <p className={s.link} onClick={() => { navigate(href + "?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
           <button>Вход</button>
@@ -87,7 +97,7 @@ export default function App() {
 
         </Authorization>
 
-        <Authorization openUrl={"registration"} title="Регистрация" method={fetchRegistration}>
+        <Authorization openUrl={"registration"} title="Регистрация" method={register}>
           <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
           <button>Зарегистрироваться</button>
           <button type="button" onClick={() => navigate(href + "?login=true", { replace: true })}>Вход</button>

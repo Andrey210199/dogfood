@@ -34,13 +34,13 @@ export default function Authorization({ openUrl, title, method, children }) {
             message: requiredForm
         },
         pattern: {
-            value: passwordFrom.pattern,
+            value: openUrl !=="login" && passwordFrom.pattern,
             message: passwordFrom.message
         }
     });
 
     function handleFormSubmit(data) {
-        dispatch(method(data));
+        method(data);
         reset();
         navigate(-1);
     }

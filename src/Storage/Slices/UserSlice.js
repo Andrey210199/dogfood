@@ -39,7 +39,6 @@ export const fetchUserAutch = createAsyncThunk(
                 const cookie_date = new Date();
                 cookie_date.setMonth(cookie_date.getMonth() + 1);
                 document.cookie = setCookie("token", data.token, { "max-age": cookie_date.toUTCString() });
-                console.log(getCookie("token"))
             }
             else {
                 return rejectWithValue(data);
