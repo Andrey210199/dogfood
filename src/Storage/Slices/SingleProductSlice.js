@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { SINGEPRODUCTNAME } from "../../Constant/StoreConstant";
 import { isError } from "../../Utilites/StoreFunctions";
+import { unAutch } from "./UserSlice";
 
 
 const initialState = {
@@ -47,7 +48,7 @@ const singleProductSlice = createSlice({
     name: SINGEPRODUCTNAME,
     initialState,
     reducers: {
-        setProductState: (state, action) =>{
+        setProductState: (state, action) => {
             state.data = action.payload;
         }
     },
@@ -72,5 +73,5 @@ const singleProductSlice = createSlice({
     }
 });
 
-export const {setProductState} = singleProductSlice.actions;
+export const { setProductState } = singleProductSlice.actions;
 export default singleProductSlice.reducer;

@@ -7,7 +7,7 @@ class Api {
     }
 
     _onResponse = (res) => {
-        return res.ok ? res.json() : res.json().then(error => Promise.reject(error));
+        return res.ok ? res.json() : res.json().then(error => Promise.reject(error.message));
     }
 
     getProducts(idProduct ="") {

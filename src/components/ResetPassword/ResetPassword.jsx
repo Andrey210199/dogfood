@@ -5,6 +5,7 @@ import FormInput from "../FormInput/FormInput";
 import Modal from "../Modal/Modal";
 import { FORMOBJECT } from "../../Constant/Constant";
 import s from "./index.module.css";
+import ButtonForm from "../Buttons/ButtonForm/ButtonForm";
 
 export default function ResetPassword() {
 
@@ -34,13 +35,13 @@ export default function ResetPassword() {
     return (
         url.get("reset_password") &&
         <Modal>
-            <Form title= "Востановления пароля" handleSubmit={handleSubmit(handleFormSubmit)}>
+            <Form title="Востановления пароля" handleSubmit={handleSubmit(handleFormSubmit)}>
                 <p className={s.infoText}>Для получения временного пароля необходимо ввести email, указанный при регистрации.</p>
 
                 <FormInput {...email} type="email" placeholder="Введите email" />
                 {errors?.email && <p className={s.error}>{errors.email.message}</p>}
 
-                <button>Отравить</button>
+                <ButtonForm>Отравить</ButtonForm>
 
             </Form>
         </Modal>

@@ -1,7 +1,7 @@
-import cn from "classnames";
 import { useNavigate } from "react-router-dom";
+import ButtonLink from "../Buttons/ButtonLink/ButtonLink";
 
-import s from "./index.module.css";
+//import s from "./index.module.css";
 
 export default function ContentHeader({title, children}){
 
@@ -11,7 +11,7 @@ export default function ContentHeader({title, children}){
 
     return(
         <>
-        <a href="#" className={ cn(s.title__link, "btn")} onClick={handleClickBack}>Назад</a>
+        <ButtonLink onClick={handleClickBack}>Назад</ButtonLink>
         <h1>{title}</h1>
         {children}
         </>

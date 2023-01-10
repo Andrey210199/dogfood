@@ -1,0 +1,17 @@
+.btn__form{
+    align-self: center;
+    padding: 0.5em 0.8em;
+    background-color: #ffc300;
+    border-radius: 20px;
+    margin-bottom: 5px;
+    color: currentColor;
+    text-decoration: none;
+
+    &:hover{
+        background-color: #b18b0e;
+    }
+    
+    &:active{
+        background-color: #947306;
+    }
+}

@@ -2,4 +2,35 @@
     border-radius: 20px;
     font-size: 15px;
     padding: 0.4em;
+    border: none;
+}
+
+.search__input:focus-visible{
+    border: none;
+    outline: none;
+}
+
+
+.icon{
+    width: 20px;
+    height: 20px;
+}
+
+.btn{
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.search{
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+.search__btn{
+    padding-right: 10px;
 }

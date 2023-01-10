@@ -1,0 +1,10 @@
+.oldPrice{
+    text-decoration: line-through;
+    font-size: 0.9em;
+}
+
+.discountPrice{
+    color: red;
+    font-size: 1.2em;
+    font-weight: 500;
+}

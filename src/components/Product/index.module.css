@@ -51,3 +51,8 @@
 .review{
     max-width: 1000px;
 }
+
+.wight{
+    display: flex;
+    align-items: center;
+}

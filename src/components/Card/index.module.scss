@@ -1,0 +1,72 @@
+.card {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+
+    &__img {
+        width: 100%;
+    }
+
+    &__link{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        color: currentColor;
+        text-decoration: none;
+        padding: 5px;
+    }
+
+    &__old_price {
+        text-decoration: line-through;
+        font-size: 0.9em;
+    }
+
+    &__price_discount {
+        color: red;
+        font-size: 1.2em;
+        font-weight: 500;
+    }
+
+    &__stickys{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__sticky{
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__sticky_right{
+        padding: 2px;
+    
+    }
+
+    &__sticky_left{
+        display: flex;
+        padding: 2px;
+      }
+
+      &__favorite{
+        border: none;
+        background-color: transparent;
+        color: #35080a4d;
+        text-shadow: #fff 1px 1px 0, #333 -1px -1px 0;
+        font-size: 2em;
+
+        &:hover{
+            color:#720f1493;
+        }
+
+        &_active{
+            color: #ee000ce5;
+            text-shadow: #fff 1px 1px 0, #333 -1px -1px 0;
+        }
+
+        &_active:hover{
+            color: #aa131be5;
+        }
+    }
+}

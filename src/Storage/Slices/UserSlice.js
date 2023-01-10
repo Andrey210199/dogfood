@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { USERSTATENAME } from "../../Constant/StoreConstant";
-import { deleteCookie, getCookie, setCookie } from "../../Utilites/Cookie";
+import { deleteCookie, setCookie } from "../../Utilites/Cookie";
 import { isError } from "../../Utilites/StoreFunctions";
 
 const initialState = {
@@ -59,7 +59,7 @@ export const fetchTokenCheck = createAsyncThunk(
 
         try {
 
-            const data = api.checkToken(token);
+            const data = await api.checkToken(token)
             return fulfillWithValue(data);
 
         }
@@ -79,7 +79,7 @@ export const fetchRegistration = createAsyncThunk(
 
         try {
 
-            const data = api.register({ ...body, group: "group-7" });
+            const data = await api.register({ ...body, group: "group-7" });
             return fulfillWithValue(data)
 
         } catch (error) {
@@ -128,11 +128,14 @@ const userSlice = createSlice({
             })
             .addCase(fetchTokenCheck.fulfilled, (state, action) => {
                 state.data = action.payload;
+                state.token = true;
                 state.isAutchCheck = true;
                 state.loading = false;
             })
             .addMatcher(isError, (state, action) => {
+                unAutch();
                 state.error = action.payload;
+                state.isAutchCheck = false;
                 state.loading = false;
             })
 

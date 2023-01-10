@@ -11,7 +11,7 @@
 .modal__content{
     max-width: 1000px;
     max-height: 1000px;
-    background: linear-gradient(#8b601b 2%,#FA9B00, #4e360f 98%);
+    background: #FA9B00;
     padding: 20px;
     border-radius: 20px;
     z-index: 1;

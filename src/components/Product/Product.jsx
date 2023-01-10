@@ -1,4 +1,3 @@
-import cn from "classnames";
 
 import s from "./index.module.css";
 import isLike from "../../Utilites/IsLike.js";
@@ -11,13 +10,18 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChangeLike } from "../../Storage/Slices/ProductsSlice";
 import { setProductState } from "../../Storage/Slices/SingleProductSlice";
+import {ReactComponent as Truck} from "./img/truck.svg";
+import {ReactComponent as Medal} from "./img/medal.svg";
+import ButtonLink from "../Buttons/ButtonLink/ButtonLink";
 import { getCookie } from "../../Utilites/Cookie";
+import Price from "../Price/Price";
+import DiscountTag from "../DiscountTag/DiscountTag";
+import ButtonLike from "../Buttons/ButtonLike/ButtonLike";
 
 export default function Page() {
     const user = useSelector(state => state.user.data);
     const product = useSelector(state => state.singleProduct.data);
-    const { name, description, price, discount, reviews, likes, pictures, stock, tags, wight, _id: id } = product;;
-    const discountPrice = Math.round(price - price * discount / 100);
+    const { name, description, price, discount, reviews, likes, pictures, _id: id } = product;;
     const like = likes && isLike(likes, user?._id);
     const descriptionHTML = createMarkup(description);
     const dispatch = useDispatch();
@@ -40,38 +44,31 @@ export default function Page() {
             <div className="title">
                 <ContentHeader title={name}>
                     <span><Rating rating={rating} /> {!!rating ? rating : 0} </span>
-                    <span>Артикул: <b>{wight}</b></span>
+                    <span>Артикул: <b>001</b></span>
                 </ContentHeader>
             </div>
 
             <div className={s.product}>
                 <div className={s.poduct_left}>
-                    {!!discount &&
-                        <div className={cn(!!discount ? "card__stickys" : "card__sticky", "top__sticky")}>
-                            <div className="discount">{`-${discount}%`}</div>
-                        </div>
-                    }
+                    <DiscountTag discount={discount}/>
 
                     <img src={pictures} alt="Изображение товара" />
                 </div>
 
                 <div className={s.product_right}>
 
-                    <div className={!!discount ? s.oldPrice : s.price}>{price}</div>
-                    {!!discount && <div className={s.discountPrice}>{discountPrice}</div>}
+                    <Price price={price} discount={discount}/>
 
                     <div className={s.wight}>
-                        <button className="btn minus">-</button>
+                        <ButtonLink>-</ButtonLink>
                         <span>0</span>
-                        <button className="btn plus">+</button>
+                        <ButtonLink>+</ButtonLink>
                     </div>
 
-                    {getCookie("token") && <button className={cn("card__favorite", { "card__favorite_active": like })} onClick={handleClickLike}>
-                        <span className="card__favorite-icon"> ♥</span>
-                    </button>}
+                    <ButtonLike like={like} handleClickLike={handleClickLike}/>
 
                     <div className={s.delivery}>
-                        <img src="#" alt="truck" />
+                        <Truck/>
                         <div className={s.right}>
                             <h3 className={s.name}>Доставка по всему Миру!</h3>
                             <p className={s.name}>Доставка курьером —
@@ -81,7 +78,7 @@ export default function Page() {
                     </div>
 
                     <div className={s.delivery}>
-                        <img src="#" alt="quality" />
+                        <Medal/>
                         <div className={s.right}>
                             <h3 className={s.name}>Доставка по всему Миру!</h3>
                             <p className={s.name}>Доставка курьером —
@@ -124,7 +121,8 @@ export default function Page() {
             </div>
 
             <div className={s.review}>
-                <FormReview title={`Отзыв о ${name}`} productId={id} />
+                {getCookie("token") ? <FormReview title={`Отзыв о ${name}`} productId={id} />
+                : <span>Комментарии могут оставлять только авторизованые пользователи.</span>}
                 <ul className={s.comments}>
                     {reviews?.map(comment => <li key={comment._id} className={s.comment}> <Rating rating={comment.rating} /> {comment.text}</li>)}
                 </ul>

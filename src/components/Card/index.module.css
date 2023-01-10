@@ -1,0 +1,59 @@
+.card {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+}
+.card__img {
+  width: 100%;
+}
+.card__link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: currentColor;
+  text-decoration: none;
+  padding: 5px;
+}
+.card__old_price {
+  text-decoration: line-through;
+  font-size: 0.9em;
+}
+.card__price_discount {
+  color: red;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+.card__stickys {
+  display: flex;
+  justify-content: space-between;
+}
+.card__sticky {
+  display: flex;
+  justify-content: flex-end;
+}
+.card__sticky_right {
+  padding: 2px;
+}
+.card__sticky_left {
+  display: flex;
+  padding: 2px;
+}
+.card__favorite {
+  border: none;
+  background-color: transparent;
+  color: rgba(53, 8, 10, 0.3019607843);
+  text-shadow: #fff 1px 1px 0, #333 -1px -1px 0;
+  font-size: 2em;
+}
+.card__favorite:hover {
+  color: rgba(114, 15, 20, 0.5764705882);
+}
+.card__favorite_active {
+  color: rgba(238, 0, 12, 0.8980392157);
+  text-shadow: #fff 1px 1px 0, #333 -1px -1px 0;
+}
+.card__favorite_active:hover {
+  color: rgba(170, 19, 27, 0.8980392157);
+}/*# sourceMappingURL=index.module.css.map */

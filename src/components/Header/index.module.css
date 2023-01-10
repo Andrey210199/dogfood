@@ -6,6 +6,27 @@
 .header__content{
     display: flex;
     align-items: flex-end;
-    justify-content: center;
-    gap: 80px;
+    justify-content: space-evenly;
+}
+
+.header__favorite{
+    fill: red;
+}
+
+.header__favorite:hover{
+    fill: #bf0f0f;
+}
+
+.header__favorite:active{
+    fill: #dd6565;
+}
+
+.user{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user__name{
+    max-width: 100px;
 }

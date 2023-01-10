@@ -15,4 +15,4 @@ export const FORMOBJECT = Object.freeze({
     }
 });
 
-export const INITIALRATING = 1;
+export const INITIALRATING = 5;

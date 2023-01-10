@@ -25,7 +25,9 @@ import { fetchProducts, fetchSearch } from '../../Storage/Slices/ProductsSlice';
 import s from './index.module.css';
 import ProtectedRouter from '../ProtectedRouter/ProtectedRouter';
 import { getCookie } from '../../Utilites/Cookie';
-
+import ButtonForm from '../Buttons/ButtonForm/ButtonForm';
+import { useCallback } from 'react';
+import { noToken } from '../../Utilites/StoreFunctions';
 
 export default function App() {
 
@@ -36,19 +38,20 @@ export default function App() {
   const href = useHref();
   const dispatch = useDispatch();
 
-  function onRequest(searchDebounce) {
+  const onRequest = useCallback((searchDebounce) => {
     return dispatch(fetchSearch(searchDebounce));
-  }
 
-  function logined(data){
+  }, [dispatch]);
+
+  function logined(data) {
     dispatch(fetchUserAutch(data))
-    .then(()=>{
-      dispatch(fetchProducts())
-    })
+      .then(() => {
+        dispatch(fetchProducts())
+      })
   }
 
-  function register(data){
-      dispatch(fetchRegistration(data));
+  function register(data) {
+    dispatch(fetchRegistration(data));
   }
 
   //Поиск ввод
@@ -57,24 +60,20 @@ export default function App() {
     if (searchDebounce !== null)
       onRequest(searchDebounce);
 
-  }, [searchDebounce]);
+  }, [searchDebounce, onRequest]);
 
   useEffect(() => {
-
     if (token) {
       dispatch(fetchTokenCheck(token))
-      .then(() => {
-        dispatch(fetchGetUser())
-          .then(() => {
-            dispatch(fetchProducts());
-          })
-      })
+        .then(() => {
+          dispatch(fetchGetUser())
+            .then(() => {
+              dispatch(fetchProducts());
+            })
+        })
     }
     else {
-      dispatch(fetchGetUser())
-        .then(() => {
-          dispatch(fetchProducts());
-        })
+      noToken(dispatch);
     }
 
   }, [dispatch, token])
@@ -91,16 +90,16 @@ export default function App() {
         {/* Модальные окна */}
         <Authorization openUrl={"login"} title="Вход" method={logined}>
 
-          <p className={s.link} onClick={() => { navigate(href + "?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
-          <button>Вход</button>
-          <button type="button" onClick={() => { navigate(href + "?registration=true", { replace: true }) }}>Регистрация</button>
+          <p className={s.link} onClick={() => { navigate(href.match(/[^#]/) + "?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
+          <ButtonForm>Вход</ButtonForm>
+          <ButtonForm type='button' onClick={() => { navigate(href.match(/[^#]/) + "?registration=true", { replace: true }) }}>Регистрация</ButtonForm>
 
         </Authorization>
 
         <Authorization openUrl={"registration"} title="Регистрация" method={register}>
           <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
-          <button>Зарегистрироваться</button>
-          <button type="button" onClick={() => navigate(href + "?login=true", { replace: true })}>Вход</button>
+          <ButtonForm>Зарегистрироваться</ButtonForm>
+          <ButtonForm type='button' onClick={() => navigate(href.match(/[^#]/g) + "?login=true", { replace: true })}>Вход</ButtonForm>
         </Authorization>
 
         <ResetPassword />
@@ -110,7 +109,7 @@ export default function App() {
       <main className="main">
         <Routes>
 
-          <Route path={ROUTELINKHOME} element={
+          <Route index element={
             <div className={s.content}>
               {isLoading ? <Spiner /> : <CardList goods={cards} />}
             </div>
@@ -131,7 +130,6 @@ export default function App() {
 
           <Route path="*" element={
             <NotFound error={errorState} />
-
           } />
 
         </Routes>

@@ -1,0 +1,20 @@
+.favorite{
+    fill: transparent;
+    background-color: transparent;
+    border: none;
+
+    &:hover{
+        fill: #bf0f0f;
+    }
+
+    &_active{
+        fill: red;;
+    
+        &:hover{
+            fill: #bf0f0f;
+        }
+    
+    }
+}
+
+
