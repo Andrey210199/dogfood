@@ -1,7 +1,9 @@
+@use "../../Constant/stiles/variables" as var;
+@use "../../Constant/stiles/mixins" as mix;
+
 .card {
+    @include mix.flexColumn(0);
     border: 1px solid black;
-    display: flex;
-    flex-direction: column;
     border-radius: 5px;
 
     &__img {
@@ -9,10 +11,8 @@
     }
 
     &__link{
+        @include mix.flexColumn(5);
         flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
         color: currentColor;
         text-decoration: none;
         padding: 5px;
@@ -24,19 +24,17 @@
     }
 
     &__price_discount {
-        color: red;
+        color: var.$discount-price;
         font-size: 1.2em;
         font-weight: 500;
     }
 
     &__stickys{
-        display: flex;
-        justify-content: space-between;
+       @include mix.flexAlign(space-between);
     }
 
     &__sticky{
-        display: flex;
-        justify-content: flex-end;
+        @include mix.flexAlign(flex-end);
     }
 
     &__sticky_right{
@@ -48,25 +46,4 @@
         display: flex;
         padding: 2px;
       }
-
-      &__favorite{
-        border: none;
-        background-color: transparent;
-        color: #35080a4d;
-        text-shadow: #fff 1px 1px 0, #333 -1px -1px 0;
-        font-size: 2em;
-
-        &:hover{
-            color:#720f1493;
-        }
-
-        &_active{
-            color: #ee000ce5;
-            text-shadow: #fff 1px 1px 0, #333 -1px -1px 0;
-        }
-
-        &_active:hover{
-            color: #aa131be5;
-        }
-    }
 }

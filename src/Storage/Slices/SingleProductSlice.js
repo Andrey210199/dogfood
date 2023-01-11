@@ -7,7 +7,10 @@ import { unAutch } from "./UserSlice";
 const initialState = {
     data: null,
     loading: true,
-    error: null
+    error: null,
+
+    commentsLoading: true,
+    comments: null
 }
 
 export const fetchSingleProduct = createAsyncThunk(
@@ -30,12 +33,12 @@ export const fetchSingleProduct = createAsyncThunk(
 export const fetchRewiew = createAsyncThunk(
     `${SINGEPRODUCTNAME}/fetchRewiew`,
 
-    async function ({ productId, body }, { rejectWithValue, fulfillWithValue, extra: api }) {
+    async function ({ productId, body }, { rejectWithValue, fulfillWithValue, getState, extra: api }) {
 
         try {
-
+            const { user } = getState();
             const data = await api.setReview(body, productId);
-            return fulfillWithValue(data);
+            return fulfillWithValue({data, user});
 
         } catch (error) {
             return rejectWithValue(error);
@@ -43,6 +46,22 @@ export const fetchRewiew = createAsyncThunk(
 
     }
 );
+
+export const fetchGetComments = createAsyncThunk(
+    `${SINGEPRODUCTNAME}/fetchGetComments`,
+
+    async function (productId, { rejectWithValue, fulfillWithValue, extra: api }) {
+
+        try {
+            const data = await api.getComments(productId);
+            return fulfillWithValue(data);
+
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+
+    }
+)
 
 const singleProductSlice = createSlice({
     name: SINGEPRODUCTNAME,
@@ -57,13 +76,22 @@ const singleProductSlice = createSlice({
             state.loading = true;
             state.error = null;
         })
+            .addCase(fetchGetComments.pending, state => {
+                state.commentsLoading = true;
+                state.comments = null;
+            })
+            .addCase(fetchGetComments.fulfilled, (state, action) => {
+                state.comments = action.payload;
+                state.commentsLoading = false;
+            })
             .addCase(fetchSingleProduct.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             })
             .addCase(fetchRewiew.fulfilled, (state, action) => {
-                state.data = action.payload;
-                state.loading = false;
+                const { data, user } = action.payload;
+                const comment = data.reviews[data.reviews.length - 1];
+                state.comments.push({ ...comment, author: user.data });
             })
             .addMatcher(isError, (state, action) => {
                 state.error = action.payload;

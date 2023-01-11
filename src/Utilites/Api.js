@@ -57,6 +57,13 @@ class Api {
 
     }
 
+    getComments(productId){
+        return fetch(`${this._url}/products/review/${productId}`, {
+            method: "GET",
+            headers: this._headers
+        }).then(this._onResponse);
+    }
+
     register(data) {
         return fetch(`${this._url}/signup`, {
             method: "POST",

@@ -7,8 +7,8 @@ export default function Price({ discount, price }) {
 
     return (
         <>
-            <div className={!!discount ? s.oldPrice : s.price}>{price}</div>
-            {!!discount && <div className={s.discountPrice}>{discountPrice}</div>}
+            <div className={!!discount ? s.oldPrice : s.price}>{price}&nbsp;₽</div>
+            {!!discount && <div className={s.discountPrice}>{discountPrice}&nbsp;₽</div>}
         </>
     )
 }

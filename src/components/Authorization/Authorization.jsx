@@ -48,6 +48,7 @@ export default function Authorization({ openUrl, title, method, children }) {
     return (
         url.get(openUrl) &&
         <Modal>
+            <div className={s.modal__content}>
             <Form title={title} handleSubmit={handleSubmit(handleFormSubmit)}>
 
                 <FormInput {...email} type="email" placeholder="Введите email" />
@@ -58,6 +59,7 @@ export default function Authorization({ openUrl, title, method, children }) {
 
                 {children}
             </Form>
+            </div>
         </Modal>
     )
 }

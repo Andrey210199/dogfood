@@ -23,11 +23,11 @@ export default function FormReview({ title = "Отзыв о товаре", produ
     })
 
     function handleFormSubmit(text) {
-            dispatch(fetchRewiew({ productId, body: { ...text, rating } }))
-                .then(() => {
-                    reset();
-                    setRating(INITIALRATING);
-                });
+        dispatch(fetchRewiew({ productId, body: { ...text, rating } }))
+            .then(() => {
+                reset();
+                setRating(INITIALRATING);
+            });
     }
 
 
@@ -36,7 +36,14 @@ export default function FormReview({ title = "Отзыв о товаре", produ
     return (
         <Form handleSubmit={handleSubmit(handleFormSubmit)}>
             <h3>{title}</h3>
-            <Rating rating={rating} setRating={setRating} isEditable />
+
+            <div className={s.content}>
+                <span className={s.content__text}>Ваша оценка: </span>
+                <Rating rating={rating} setRating={setRating} isEditable />
+            </div>
+
+
+            <span className={s.content__text}>Комментарий: </span>
             <FormInput {...comment} type_input="textarea" placeholder="Введите текст отзыва." />
             {errors?.comment && <p className={s.error}>{errors.comment.message}</p>}
             <ButtonForm>Отправить</ButtonForm>

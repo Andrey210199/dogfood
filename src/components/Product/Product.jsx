@@ -4,24 +4,33 @@ import isLike from "../../Utilites/IsLike.js";
 import { createMarkup, scrollClear } from "../../Utilites/Product.js";
 import ContentHeader from "../ContentHeader/ContentHeader";
 import Rating from "../Rating/Rating";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
+import dayjs from "dayjs";
+import "dayjs/locale/ru";
+import relativeTime from "dayjs/plugin/relativeTime";
+
 import FormReview from "../FormReview/FormReview";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChangeLike } from "../../Storage/Slices/ProductsSlice";
 import { setProductState } from "../../Storage/Slices/SingleProductSlice";
-import {ReactComponent as Truck} from "./img/truck.svg";
-import {ReactComponent as Medal} from "./img/medal.svg";
+import { ReactComponent as Truck } from "./img/truck.svg";
+import { ReactComponent as Medal } from "./img/medal.svg";
 import ButtonLink from "../Buttons/ButtonLink/ButtonLink";
 import { getCookie } from "../../Utilites/Cookie";
 import Price from "../Price/Price";
 import DiscountTag from "../DiscountTag/DiscountTag";
 import ButtonLike from "../Buttons/ButtonLike/ButtonLike";
+import Spiner from "../Spiner/Spiner";
+
+dayjs.locale("ru");
+dayjs.extend(relativeTime);
 
 export default function Page() {
     const user = useSelector(state => state.user.data);
-    const product = useSelector(state => state.singleProduct.data);
-    const { name, description, price, discount, reviews, likes, pictures, _id: id } = product;;
+    const produtcState = useSelector(state => state.singleProduct);
+    const product = produtcState.data;
+    const { name, description, price, discount, reviews, likes, pictures, _id: id } = product;
+    const { comments, commentsLoading } = produtcState;
     const like = likes && isLike(likes, user?._id);
     const descriptionHTML = createMarkup(description);
     const dispatch = useDispatch();
@@ -40,24 +49,26 @@ export default function Page() {
     }
 
     return (
-        <div className="main__content">
-            <div className="title">
+        <div className={s.main}>
+            <div className={s.main__title}>
                 <ContentHeader title={name}>
-                    <span><Rating rating={rating} /> {!!rating ? rating : 0} </span>
-                    <span>Артикул: <b>001</b></span>
+                    <div className={s.main__content}>
+                        <span className={s.rating}><Rating rating={rating} /> <b className={s.rating__count}>{!!rating ? rating : 0}</b> </span>
+                        <span>Артикул: <b>001</b></span>
+                    </div>
                 </ContentHeader>
             </div>
 
             <div className={s.product}>
                 <div className={s.poduct_left}>
-                    <DiscountTag discount={discount}/>
+                    <DiscountTag discount={discount} />
 
-                    <img src={pictures} alt="Изображение товара" />
+                    <img src={pictures} className={s.product__img} alt="Изображение товара" />
                 </div>
 
                 <div className={s.product_right}>
 
-                    <Price price={price} discount={discount}/>
+                    <Price price={price} discount={discount} />
 
                     <div className={s.wight}>
                         <ButtonLink>-</ButtonLink>
@@ -65,24 +76,25 @@ export default function Page() {
                         <ButtonLink>+</ButtonLink>
                     </div>
 
-                    <ButtonLike like={like} handleClickLike={handleClickLike}/>
+                    <ButtonLike like={like} handleClickLike={handleClickLike} />
+                    <span>{like ? "В избранном" : "В избранное"}</span>
 
                     <div className={s.delivery}>
-                        <Truck/>
-                        <div className={s.right}>
-                            <h3 className={s.name}>Доставка по всему Миру!</h3>
-                            <p className={s.name}>Доставка курьером —
-                                <span className={s.bold}>от 300 Р</span></p>
+                        <Truck className={s.delivery__left} />
+                        <div className={s.delivery__right}>
+                            <h3 className={s.delivery__name}>Доставка по всему Миру!</h3>
+                            <p className={s.delivery__name}>Доставка курьером —
+                                <span className={s.delivery__bold}>от 300 Р</span></p>
                         </div>
 
                     </div>
 
                     <div className={s.delivery}>
-                        <Medal/>
-                        <div className={s.right}>
-                            <h3 className={s.name}>Доставка по всему Миру!</h3>
-                            <p className={s.name}>Доставка курьером —
-                                <span className={s.bold}>от 300 Р</span></p>
+                        <Medal className={s.delivery__left} />
+                        <div className={s.delivery__right}>
+                            <h3 className={s.delivery__name}>Доставка по всему Миру!</h3>
+                            <p className={s.delivery__name}>Доставка курьером —
+                                <span className={s.delivery__bold}>от 300 Р</span></p>
                         </div>
                     </div>
 
@@ -122,10 +134,11 @@ export default function Page() {
 
             <div className={s.review}>
                 {getCookie("token") ? <FormReview title={`Отзыв о ${name}`} productId={id} />
-                : <span>Комментарии могут оставлять только авторизованые пользователи.</span>}
-                <ul className={s.comments}>
-                    {reviews?.map(comment => <li key={comment._id} className={s.comment}> <Rating rating={comment.rating} /> {comment.text}</li>)}
-                </ul>
+                    : <b className={s.review__text}>Комментарии могут оставлять только авторизованые пользователи.</b>}
+                {commentsLoading ? <Spiner />
+                    : <ul className={s.comments}>
+                        {comments?.map(comment => <li key={comment._id} className={s.comment}> <span><b>{comment.author.name}</b> {dayjs(comment.created_at).fromNow()}</span> <Rating rating={comment.rating} /> {comment.text}</li>)}
+                    </ul>}
             </div>
 
         </div>

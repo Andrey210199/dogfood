@@ -1,0 +1,10 @@
+.content{
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &__text{
+        font-weight: bold;
+    }
+}

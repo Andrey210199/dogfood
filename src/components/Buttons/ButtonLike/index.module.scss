@@ -1,17 +1,19 @@
+@use "../../../Constant/stiles/variables" as var;
+
 .favorite{
     fill: transparent;
     background-color: transparent;
     border: none;
 
     &:hover{
-        fill: #bf0f0f;
+        fill: var.$btn-like_hover;
     }
 
     &_active{
-        fill: red;;
+        fill: var.$btn-like_active;;
     
         &:hover{
-            fill: #bf0f0f;
+            fill: var.$btn-like_hover;
         }
     
     }

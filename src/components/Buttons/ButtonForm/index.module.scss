@@ -1,17 +1,18 @@
-.btn__form{
-    align-self: center;
+@use "../../../Constant/stiles/variables" as var;
+
+.btn__form {
     padding: 0.5em 0.8em;
-    background-color: #ffc300;
+    background-color: var.$btn-color;
     border-radius: 20px;
     margin-bottom: 5px;
     color: currentColor;
     text-decoration: none;
 
-    &:hover{
-        background-color: #b18b0e;
+    &:hover {
+        background-color: var.$btn-color_hover
     }
-    
-    &:active{
-        background-color: #947306;
+
+    &:active {
+        background-color: var.$btn-color_active;
     }
 }

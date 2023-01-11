@@ -1,26 +1,22 @@
-.card__stickys{
-    display: flex;
-    justify-content: space-between;
+.card__stickys {
+  display: flex;
+  justify-content: space-between;
 }
-
-.card__sticky{
-    display: flex;
-    justify-content: flex-end;
+.card__sticky {
+  display: flex;
+  justify-content: flex-end;
 }
-
-.card__sticky_right{
-    padding: 2px;
-
+.card__sticky_right {
+  padding: 2px;
 }
-
-.card__sticky_left{
+.card__sticky_left {
   display: flex;
   padding: 2px;
 }
 
-.discount{
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    padding: 0.4em;
-}
+.discount {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0.4em;
+}/*# sourceMappingURL=index.module.css.map */

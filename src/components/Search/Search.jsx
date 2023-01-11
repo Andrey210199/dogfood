@@ -34,8 +34,10 @@ export default function Search() {
         <form action="" className={s.search} onSubmit={handleSubmit}>
             <input type="text" value={inputText !== null ? inputText : ""} className={s.search__input} placeholder="Поиск" onInput={handleInput} />
 
+           {inputText && <>
             <button type="button" className={cn(s.btn,"clear__btn")} onClick={clearInput}><ClearIcon className={s.icon}/></button>
             <button type="submit" className={cn(s.btn, s.search__btn)}><SearchIcon className={s.icon}/></button>
+            </>}
         </form>
     )
 }

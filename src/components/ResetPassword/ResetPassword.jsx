@@ -35,6 +35,7 @@ export default function ResetPassword() {
     return (
         url.get("reset_password") &&
         <Modal>
+            <div className={s.modal__content}>
             <Form title="Востановления пароля" handleSubmit={handleSubmit(handleFormSubmit)}>
                 <p className={s.infoText}>Для получения временного пароля необходимо ввести email, указанный при регистрации.</p>
 
@@ -44,6 +45,7 @@ export default function ResetPassword() {
                 <ButtonForm>Отравить</ButtonForm>
 
             </Form>
+            </div>
         </Modal>
     )
 }

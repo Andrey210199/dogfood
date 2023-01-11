@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import NotFound from "../NotFound/NotFound";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSingleProduct } from "../../Storage/Slices/SingleProductSlice";
+import { fetchGetComments, fetchSingleProduct } from "../../Storage/Slices/SingleProductSlice";
 
 
 export default function ProductPage() {
@@ -15,6 +15,7 @@ export default function ProductPage() {
 
     useEffect(() => {
         dispatch(fetchSingleProduct(productId));
+        dispatch(fetchGetComments(productId));
     }, [dispatch, productId]);
 
     return (

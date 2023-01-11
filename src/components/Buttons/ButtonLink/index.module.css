@@ -1,1 +1,15 @@
-/*# sourceMappingURL=index.module.css.map */
+.btn__form {
+  align-self: center;
+  padding: 0.5em 0.8em;
+  background-color: #ffc300;
+  border-radius: 20px;
+  margin-bottom: 5px;
+  color: currentColor;
+  text-decoration: none;
+}
+.btn__form:hover {
+  background-color: #b18b0e;
+}
+.btn__form:active {
+  background-color: #947306;
+}/*# sourceMappingURL=index.module.css.map */

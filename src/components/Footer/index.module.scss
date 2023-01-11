@@ -1,0 +1,41 @@
+@use "../../Constant/stiles/variables" as var;
+
+.footer{
+    padding: 20px 0;
+
+    &__container{
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: 0 auto;
+    
+    }
+    
+    &__links{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    &__link{
+        color: var.$link;
+        text-decoration: none;
+    }
+    
+    &__link:hover{
+        color: var.$link_hover;
+    }
+    
+    &__link:active{
+        color: var.$link_active;
+    }
+}
+
+
+
+.social{
+    display: flex;
+    gap: 10px;
+}

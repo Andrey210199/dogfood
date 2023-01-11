@@ -1,0 +1,107 @@
+@use "../../Constant/stiles/variables" as var;
+
+.product{
+ display: flex;
+ justify-content: center;
+ flex-wrap: wrap;
+ gap: 10px;
+
+ &__img{
+    width: 100%;
+}
+
+}
+
+.delivery{
+
+    display: flex;
+    gap: 5px;
+    background-color: var.$delivery-color;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 5px;
+
+    &__name{
+        margin: 0;
+        padding: 3px;
+    }
+}
+
+.rating{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &__count{
+        font-size: 1.5em;
+
+    }
+}
+
+
+.title{
+    text-align: center;
+}
+
+.subTitle{
+    padding-left: 20px;
+}
+
+.description{
+    padding-left: 20px;
+    border: 1px solid black;
+}
+
+.grid{
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+
+.naming{
+    border: 1px solid black;
+}
+
+.oldPrice{
+    text-decoration: line-through;
+    font-size: 0.9em;
+}
+
+.discountPrice{
+    color: red;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.comments{
+    list-style: none;
+}
+
+.comment{
+    display:  flex;
+    flex-direction: column;
+    row-gap: 5px;
+    padding: 20px;
+}
+
+.review{
+   display: flex;
+   flex-direction: column;
+
+   &__text{
+    align-self: center;
+    padding: 10px;
+   }
+}
+
+.wight{
+    display: flex;
+    align-items: center;
+}
+
+.main__content{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+}

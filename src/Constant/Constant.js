@@ -1,4 +1,4 @@
-export const ROUTELINKHOME = "/";
+export const ROUTELINKHOME = "";
 export const ROUTELINKPRODUCT = "/product/";
 export const ROUTELINKFAVORITES = "/favorites";
 export const ROUTELINKFAQ = "/faq";

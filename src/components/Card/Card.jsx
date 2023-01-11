@@ -6,7 +6,6 @@ import isLike from "../../Utilites/IsLike";
 import { ROUTELINKPRODUCT } from "../../Constant/Constant.js";
 import { fetchChangeLike } from "../../Storage/Slices/ProductsSlice";
 
-import "./styles.css";
 import s from "./index.module.css";
 import ButtonLink from "../Buttons/ButtonLink/ButtonLink";
 import Price from "../Price/Price";

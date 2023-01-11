@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import s from "./index.module.css";
+
 export default function ButtonLink({children, onClick, navText="/#"}){
 
     function handleClick(e){
@@ -7,6 +9,6 @@ export default function ButtonLink({children, onClick, navText="/#"}){
     }
     
     return(
-        <Link to={navText} className="card__cart btn" onClick={handleClick}>{children}</Link>
+        <Link to={navText} className={s.btn__form} onClick={handleClick}>{children}</Link>
     )
 }
