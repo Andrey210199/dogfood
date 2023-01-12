@@ -1,0 +1,44 @@
+.search{
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid black;
+    position: relative;
+    padding-right: 45px;
+
+    &__input{
+        border-radius: 20px;
+        font-size: 15px;
+        padding: 0.4em;
+        border: none;
+
+        &:focus-visible{
+            border: none;
+            outline: none;
+        }
+    }
+}
+
+
+.icon{
+    width: 20px;
+    height: 20px;
+}
+
+.btn{
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    &s{
+        position:  absolute;
+        right: 0;
+    }
+
+    &__search{
+        padding-right: 10px;
+    }
+}
+

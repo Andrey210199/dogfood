@@ -1,0 +1,14 @@
+.favorite {
+  fill: transparent;
+  background-color: transparent;
+  border: none;
+}
+.favorite:hover {
+  fill: #bf0f0f;
+}
+.favorite_active {
+  fill: red;
+}
+.favorite_active:hover {
+  fill: #bf0f0f;
+}/*# sourceMappingURL=index.module.css.map */

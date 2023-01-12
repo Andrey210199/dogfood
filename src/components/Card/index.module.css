@@ -1,0 +1,43 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.card__img {
+  width: 100%;
+}
+.card__link {
+  display: flex;
+  flex-direction: column;
+  gap: 5;
+  flex: 1;
+  color: currentColor;
+  text-decoration: none;
+  padding: 5px;
+}
+.card__old_price {
+  text-decoration: line-through;
+  font-size: 0.9em;
+}
+.card__price_discount {
+  color: red;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+.card__stickys {
+  display: flex;
+  justify-content: space-between;
+}
+.card__sticky {
+  display: flex;
+  justify-content: flex-end;
+}
+.card__sticky_right {
+  padding: 2px;
+}
+.card__sticky_left {
+  display: flex;
+  padding: 2px;
+}/*# sourceMappingURL=index.module.css.map */

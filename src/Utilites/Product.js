@@ -7,6 +7,11 @@ export function productLike(cards, newCard, setCards){
     setCards(updateCard);
 }
 
+export function productFilter(data, user, filterCondition){
+    return data.filter(item=> filterCondition(item, user));
+
+}
+
 export function scrollClear(){
     window.scrollTo(0,0);
 }

@@ -1,38 +1,43 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import cn from "classnames";
 
-import {ROUTELINKHOME} from "../../Constant/Constant.js";
+import { ReactComponent as ClearIcon} from "./img/clear.svg";
+import { ReactComponent as SearchIcon} from "./img/magnifier.svg";
+import { ROUTELINKHOME } from "../../Constant/Constant.js";
+import { fetchSearch, setSearchState } from "../../Storage/Slices/ProductsSlice.js";
 import s from "./index.module.css";
 
-export default function Search({onInput, onSubmit}){
+export default function Search() {
 
-    const [inputText, setInputText] = useState("");
+    const inputText = useSelector(state => state.products.search);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    function handleInput(evt){
-        setInputText(evt.target.value);
-        onInput && onInput(evt.target.value);
-    }
-    
-    function clearInput(){
-        setInputText("");
-        onInput && onInput("");
+    function handleInput(evt) {
+        dispatch(setSearchState(evt.target.value));
     }
 
-    function handleSubmit(evt){
+    function clearInput() {
+        dispatch(setSearchState(""));
+    }
+
+    function handleSubmit(evt) {
         evt.preventDefault();
         navigate(ROUTELINKHOME);
-        onSubmit();
+        dispatch(fetchSearch(inputText));
     }
 
 
 
-    return( 
-        <form action="" className="search" onSubmit={handleSubmit}>
-            <input type="text" value={inputText} className={s.search__input} placeholder="Поиск" onInput={handleInput}/>
+    return (
+        <form action="" className={s.search} onSubmit={handleSubmit}>
+            <input type="text" value={inputText !== null ? inputText : ""} className={s.search__input} placeholder="Поиск" onInput={handleInput} />
 
-            <button type="button" className="btn clear__btn" onClick={clearInput}>Очистить</button>
-            <button type="submit" className="btn search__btn">Найти</button>
+           {inputText && <div className={s.btns}>
+            <button type="button" className={cn(s.btn, s.btn__clear)} onClick={clearInput}><ClearIcon className={s.icon}/></button>
+            <button type="submit" className={cn(s.btn, s.btn__search)}><SearchIcon className={s.icon}/></button>
+            </div>}
         </form>
     )
 }

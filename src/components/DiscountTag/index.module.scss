@@ -1,0 +1,32 @@
+@use "../../Constant/stiles/variables" as var;
+
+.card{
+    &__stickys{
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    &__sticky{
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    &__sticky_right{
+        padding: 2px;
+    
+    }
+    
+    &__sticky_left{
+      display: flex;
+      padding: 2px;
+    }
+
+}
+
+
+.discount{
+    background-color: var.$discount-bable;
+    color: var.$discount-bable_text;
+    border-radius: 50%;
+    padding: 0.4em;
+}

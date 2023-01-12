@@ -1,0 +1,8 @@
+.content {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.content__text {
+  font-weight: bold;
+}/*# sourceMappingURL=index.module.css.map */

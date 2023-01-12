@@ -1,0 +1,11 @@
+@mixin flexColumn($gap) {
+    display: flex;
+    flex-direction: column;
+    gap: $gap;
+}
+
+@mixin flexAlign($horizont, $vertical) {
+    display: flex;
+    justify-content: $horizont;
+    align-items: $vertical;
+}

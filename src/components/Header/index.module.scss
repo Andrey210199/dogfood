@@ -1,0 +1,47 @@
+@use "../../Constant/stiles/variables" as var;
+
+.header {
+    width: 100%;
+    padding: 20px 0;
+
+    &__content {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-evenly;
+        flex-wrap: wrap-reverse;
+    }
+
+    &__favorite {
+        fill: var.$btn-like_active;
+        width: 30px;
+        height: 30px;
+
+        &:hover {
+            fill: var.$btn-like_hover;
+        }
+    
+        &:active {
+            fill: var.$btn-like;
+        }
+    }
+
+    &__link{
+        position: relative;
+        &__count{
+            position: absolute;
+            top: 4px;
+            right: 11px;
+            color: white;
+        }
+    }
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &__name {
+        max-width: 100px;
+    }
+}

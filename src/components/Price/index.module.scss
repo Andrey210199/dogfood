@@ -1,0 +1,12 @@
+@use "../../Constant/stiles/variables" as var;
+
+.oldPrice{
+    text-decoration: line-through;
+    font-size: 0.9em;
+}
+
+.discountPrice{
+    color: var.$discount-price;
+    font-size: 1.2em;
+    font-weight: 500;
+}

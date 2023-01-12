@@ -1,0 +1,21 @@
+@use "../../Constant/stiles/variables" as var;
+
+.modal{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #100d0199;
+
+    &__content{
+        max-width: 1000px;
+        max-height: 1000px;
+        background: var.$modal_content;
+        padding: 20px;
+        border-radius: 20px;
+        z-index: 1;
+    }
+}
+

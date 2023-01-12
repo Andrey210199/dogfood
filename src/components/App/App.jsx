@@ -1,109 +1,142 @@
-import  Header from '../Header/Header';
-import  Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import CardList from '../CardList/CardList';
-import  Logo from '../Logo/Logo';
-import  Search from '../Search/Search';
+import Logo from '../Logo/Logo';
+import Search from '../Search/Search';
+import Authorization from '../Authorization/Authorization';
+import ResetPassword from '../ResetPassword/ResetPassword';
 
-import { onRequest, onSubmit } from '../../Utilites/Search';
-import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Route, Routes, useHref, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useDebounce from '../../Hooks/UseDebounce';
 
-import { productLike } from "../../Utilites/Product.js";
-import { GlobalContext } from "../../Context/GlobalContext.js";
-import { PageContext } from "../../Context/PageContext.js";
 import ProductPage from '../../Pages/Product-page/ProductPage';
 import NotFound from '../../Pages/NotFound/NotFound';
+import Spiner from '../Spiner/Spiner';
+import FAQPage from '../../Pages/FAQPage/FAQPage';
+import FavoritePage from '../../Pages/FavoritePage/FavoritePage';
 
-import api from '../../Utilites/Api';
-import isLike from '../../Utilites/IsLike';
-import {ROUTELINKHOME, ROUTELINKPRODUCT} from "../../Constant/Constant.js";
+import { ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKHOME, ROUTELINKPRODUCT } from "../../Constant/Constant.js";
+import { fetchGetUser, fetchUserAutch, fetchRegistration, fetchTokenCheck } from '../../Storage/Slices/UserSlice';
+import { fetchProducts, fetchSearch } from '../../Storage/Slices/ProductsSlice';
 
 import s from './index.module.css';
-import Spiner from '../Spiner/Spiner';
+import ProtectedRouter from '../ProtectedRouter/ProtectedRouter';
+import { getCookie } from '../../Utilites/Cookie';
+import ButtonForm from '../Buttons/ButtonForm/ButtonForm';
+import { useCallback } from 'react';
+import { noToken } from '../../Utilites/StoreFunctions';
 
-function App() {
+export default function App() {
 
-  const [cards, setCards]= useState([]);
-  const [search,setSearch] = useState("");
-  const [user, setUser] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorState, setErrorState] = useState(null);
+  const { data: cards, loading: isLoading, error: errorState, search } = useSelector(state => state.products);
+  const token = getCookie("token");
   const searchDebounce = useDebounce(search, 500);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onRequest = useCallback((searchDebounce) => {
+    return dispatch(fetchSearch(searchDebounce));
+
+  }, [dispatch]);
+
+  function logined(data) {
+    dispatch(fetchUserAutch(data))
+      .then(() => {
+        dispatch(fetchProducts())
+      })
+  }
+
+  function register(data) {
+    dispatch(fetchRegistration(data));
+  }
 
   //Поиск ввод
-  function onInput(inputValue){
-    setSearch(inputValue);
-  }
+  useEffect(() => {
 
-  function handleLike(id,likes){
-    let like = isLike(likes, user?._id);
-    api.checkLike(id, like)
-    .then((newCard)=> {
-      productLike(cards, newCard, setCards);
-    })
-  }
+    if (searchDebounce !== null)
+      onRequest(searchDebounce);
 
-  useEffect(()=>{
-    onRequest(searchDebounce)
-    .then((searchRes)=>{
-      setCards(searchRes);
-    });
+  }, [searchDebounce, onRequest]);
 
-  },[searchDebounce]);
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchTokenCheck(token))
+        .then(() => {
+          dispatch(fetchGetUser())
+            .then(() => {
+              dispatch(fetchProducts());
+            })
+        })
+    }
+    else {
+      noToken(dispatch);
+    }
 
-  useEffect(()=>{
-
-   api.setProductsUser()
-   .then(([productsData, userData])=>{
-    setUser(userData);
-    setCards(productsData.products);
-    setIsLoading(false);
-   })
-   .catch((err)=> setErrorState(err));
-
-  },[])
-
-
-
+  }, [dispatch, token])
 
   return (
-    <GlobalContext.Provider value={{user, setSearch}}>
-      <Header userData={user}>
-        <Logo/>
-        <Search onInput={onInput} onSubmit={onSubmit}/>
+    <>
+      <Header>
+        <Logo />
+        <Search />
       </Header>
 
+      <ProtectedRouter>
+
+        {/* Модальные окна */}
+        <Authorization openUrl={"login"} title="Вход" method={logined}>
+
+          <p className={s.link} onClick={() => { navigate("?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
+          <ButtonForm>Вход</ButtonForm>
+          <ButtonForm type='button' onClick={() => { navigate("?registration=true", { replace: true }) }}>Регистрация</ButtonForm>
+
+        </Authorization>
+
+        <Authorization openUrl={"registration"} title="Регистрация" method={register}>
+          <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
+          <ButtonForm>Зарегистрироваться</ButtonForm>
+          <ButtonForm type='button' onClick={() => navigate("?login=true", { replace: true })}>Вход</ButtonForm>
+        </Authorization>
+
+        <ResetPassword />
+
+      </ProtectedRouter>
+
       <main className="main">
-        <PageContext.Provider value={{ cards, handleLike, setCards, setIsLoading, isLoading, errorState, setErrorState }}>
-          <Routes>
+        <Routes>
 
-            <Route path={ROUTELINKHOME} element={
-              <div className={s.content}>
-                 {isLoading ? <Spiner/>: <CardList/>} 
-              </div>
+          <Route index element={
+            <div className={s.content}>
+              {isLoading ? <Spiner /> : <CardList goods={cards} />}
+            </div>
 
-            } />
+          } />
 
-            <Route path={`${ROUTELINKPRODUCT}:productId`} element={
-              <ProductPage/>
-            }/>
+          <Route path={`${ROUTELINKPRODUCT}:productId`} element={
+            <ProductPage />
+          } />
 
-            <Route path="*" element={
-              <NotFound setSearch={setSearch} error={errorState}/>
+          <Route path={ROUTELINKFAVORITES} element={
+            <FavoritePage />
+          } />
 
-            }/>
+          <Route path={ROUTELINKFAQ} element={
+            <FAQPage />
+          } />
 
-          </Routes>
-        </PageContext.Provider>
+          <Route path="*" element={
+            <NotFound error={errorState} />
+          } />
+
+        </Routes>
       </main>
 
       <Footer>
-        <Logo/>
+        <Logo />
       </Footer>
-    </GlobalContext.Provider>
+    </>
   );
 }
-
-export default App;
