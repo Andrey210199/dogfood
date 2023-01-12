@@ -1,5 +1,4 @@
 .btn__form {
-  align-self: center;
   padding: 0.5em 0.8em;
   background-color: #ffc300;
   border-radius: 20px;
@@ -12,4 +11,8 @@
 }
 .btn__form:active {
   background-color: #947306;
+}
+
+.btn__form {
+  align-self: center;
 }/*# sourceMappingURL=index.module.css.map */

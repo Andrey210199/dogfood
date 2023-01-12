@@ -35,7 +35,6 @@ export default function App() {
   const token = getCookie("token");
   const searchDebounce = useDebounce(search, 500);
   const navigate = useNavigate();
-  const href = useHref();
   const dispatch = useDispatch();
 
   const onRequest = useCallback((searchDebounce) => {
@@ -90,16 +89,16 @@ export default function App() {
         {/* Модальные окна */}
         <Authorization openUrl={"login"} title="Вход" method={logined}>
 
-          <p className={s.link} onClick={() => { navigate(href.match(/[^#]/) + "?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
+          <p className={s.link} onClick={() => { navigate("?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
           <ButtonForm>Вход</ButtonForm>
-          <ButtonForm type='button' onClick={() => { navigate(href.match(/[^#]/) + "?registration=true", { replace: true }) }}>Регистрация</ButtonForm>
+          <ButtonForm type='button' onClick={() => { navigate("?registration=true", { replace: true }) }}>Регистрация</ButtonForm>
 
         </Authorization>
 
         <Authorization openUrl={"registration"} title="Регистрация" method={register}>
           <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
           <ButtonForm>Зарегистрироваться</ButtonForm>
-          <ButtonForm type='button' onClick={() => navigate(href.match(/[^#]/g) + "?login=true", { replace: true })}>Вход</ButtonForm>
+          <ButtonForm type='button' onClick={() => navigate("?login=true", { replace: true })}>Вход</ButtonForm>
         </Authorization>
 
         <ResetPassword />

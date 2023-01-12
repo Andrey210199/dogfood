@@ -5,13 +5,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import FormInput from "../FormInput/FormInput";
 import { FORMOBJECT } from "../../Constant/Constant";
-import { useDispatch } from "react-redux";
 
 export default function Authorization({ openUrl, title, method, children }) {
 
     const [url] = useSearchParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: "onBlur" });
 
