@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import FormInput from "../FormInput/FormInput";
 import { FORMOBJECT } from "../../Constant/Constant";
+import ProtectedRouter from "../ProtectedRouter/ProtectedRouter";
 
 export default function Authorization({ openUrl, title, method, children }) {
 
@@ -32,7 +33,7 @@ export default function Authorization({ openUrl, title, method, children }) {
             message: requiredForm
         },
         pattern: {
-            value: openUrl !=="login" && passwordFrom.pattern,
+            value: openUrl !== "login" && passwordFrom.pattern,
             message: passwordFrom.message
         }
     });
@@ -45,19 +46,21 @@ export default function Authorization({ openUrl, title, method, children }) {
 
     return (
         url.get(openUrl) &&
-        <Modal>
-            <div className={s.modal__content}>
-            <Form title={title} handleSubmit={handleSubmit(handleFormSubmit)}>
+        <ProtectedRouter>
+            <Modal>
+                <div className={s.modal__content}>
+                    <Form title={title} handleSubmit={handleSubmit(handleFormSubmit)}>
 
-                <FormInput {...email} type="email" placeholder="Введите email" />
-                {errors?.email && <p className={s.error}>{errors.email.message}</p>}
+                        <FormInput {...email} type="email" placeholder="Введите email" />
+                        {errors?.email && <p className={s.error}>{errors.email.message}</p>}
 
-                <FormInput {...password} type="password" placeholder="Введите пароль" />
-                {errors?.password && <p className={s.error}>{errors.password.message}</p>}
+                        <FormInput {...password} type="password" placeholder="Введите пароль" />
+                        {errors?.password && <p className={s.error}>{errors.password.message}</p>}
 
-                {children}
-            </Form>
-            </div>
-        </Modal>
+                        {children}
+                    </Form>
+                </div>
+            </Modal>
+        </ProtectedRouter>
     )
 }

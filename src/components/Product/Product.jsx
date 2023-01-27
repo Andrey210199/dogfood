@@ -15,12 +15,13 @@ import { fetchChangeLike } from "../../Storage/Slices/ProductsSlice";
 import { setProductState } from "../../Storage/Slices/SingleProductSlice";
 import { ReactComponent as Truck } from "./img/truck.svg";
 import { ReactComponent as Medal } from "./img/medal.svg";
-import ButtonLink from "../Buttons/ButtonLink/ButtonLink";
 import { getCookie } from "../../Utilites/Cookie";
 import Price from "../Price/Price";
 import DiscountTag from "../DiscountTag/DiscountTag";
 import ButtonLike from "../Buttons/ButtonLike/ButtonLike";
 import Spiner from "../Spiner/Spiner";
+import ButtonCount from "../ButtonCount/ButtonCount";
+import { addCart, setCountCart } from "../../Storage/Slices/CartSlice";
 
 dayjs.locale("ru");
 dayjs.extend(relativeTime);
@@ -30,6 +31,7 @@ export default function Page() {
     const produtcState = useSelector(state => state.singleProduct);
     const product = produtcState.data;
     const { name, description, price, discount, reviews, likes, pictures, _id: id } = product;
+    const count = useSelector(state => state.cart.data[id]?.quality);
     const { comments, commentsLoading } = produtcState;
     const like = likes && isLike(likes, user?._id);
     const descriptionHTML = createMarkup(description);
@@ -46,6 +48,15 @@ export default function Page() {
         dispatch(fetchChangeLike(product))
             .then(updateProduct => dispatch(setProductState(updateProduct.payload.data)));
 
+    }
+
+    function handleAddCart() {
+        if (!count) {
+            dispatch(addCart({ ...product }));
+        }
+        else {
+            dispatch(setCountCart({ id, quality: count + 1 }))
+        }
     }
 
     return (
@@ -71,13 +82,12 @@ export default function Page() {
                     <Price price={price} discount={discount} />
 
                     <div className={s.wight}>
-                        <ButtonLink>-</ButtonLink>
-                        <span>0</span>
-                        <ButtonLink>+</ButtonLink>
+                        <ButtonCount {...product} />
+                        <button onClick={handleAddCart}>{count ? "В корзине" : "В корзину"}</button>
                     </div>
 
                     <ButtonLike like={like} handleClickLike={handleClickLike} />
-                    <span>{like ? "В избранном" : "В избранное"}</span>
+                    {getCookie("token") && <span>{like ? "В избранном" : "В избранное"}</span>}
 
                     <div className={s.delivery}>
                         <Truck className={s.delivery__left} />

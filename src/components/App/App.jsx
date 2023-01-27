@@ -7,7 +7,7 @@ import Authorization from '../Authorization/Authorization';
 import ResetPassword from '../ResetPassword/ResetPassword';
 
 import { useEffect } from 'react';
-import { Route, Routes, useHref, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import useDebounce from '../../Hooks/UseDebounce';
@@ -18,16 +18,16 @@ import Spiner from '../Spiner/Spiner';
 import FAQPage from '../../Pages/FAQPage/FAQPage';
 import FavoritePage from '../../Pages/FavoritePage/FavoritePage';
 
-import { ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKHOME, ROUTELINKPRODUCT } from "../../Constant/Constant.js";
+import { ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKPRODUCT } from "../../Constant/Constant.js";
 import { fetchGetUser, fetchUserAutch, fetchRegistration, fetchTokenCheck } from '../../Storage/Slices/UserSlice';
 import { fetchProducts, fetchSearch } from '../../Storage/Slices/ProductsSlice';
 
 import s from './index.module.css';
-import ProtectedRouter from '../ProtectedRouter/ProtectedRouter';
 import { getCookie } from '../../Utilites/Cookie';
 import ButtonForm from '../Buttons/ButtonForm/ButtonForm';
 import { useCallback } from 'react';
 import { noToken } from '../../Utilites/StoreFunctions';
+import CartPage from '../../Pages/CartPage/CartPage';
 
 export default function App() {
 
@@ -84,26 +84,23 @@ export default function App() {
         <Search />
       </Header>
 
-      <ProtectedRouter>
+      {/* Модальные окна */}
+      <Authorization openUrl={"login"} title="Вход" method={logined}>
 
-        {/* Модальные окна */}
-        <Authorization openUrl={"login"} title="Вход" method={logined}>
+        <p className={s.link} onClick={() => { navigate("?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
+        <ButtonForm>Вход</ButtonForm>
+        <ButtonForm type='button' onClick={() => { navigate("?registration=true", { replace: true }) }}>Регистрация</ButtonForm>
 
-          <p className={s.link} onClick={() => { navigate("?reset_password=true", { replace: true }) }}>Восстановить пароль</p>
-          <ButtonForm>Вход</ButtonForm>
-          <ButtonForm type='button' onClick={() => { navigate("?registration=true", { replace: true }) }}>Регистрация</ButtonForm>
+      </Authorization>
 
-        </Authorization>
+      <Authorization openUrl={"registration"} title="Регистрация" method={register}>
+        <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
+        <ButtonForm>Зарегистрироваться</ButtonForm>
+        <ButtonForm type='button' onClick={() => navigate("?login=true", { replace: true })}>Вход</ButtonForm>
+      </Authorization>
 
-        <Authorization openUrl={"registration"} title="Регистрация" method={register}>
-          <p className="infoText">Регистрируясь на сайте, вы соглашаетесь с нашими Правилами и Политикой конфиденциальности и соглашаетесь на информационную рассылку.</p>
-          <ButtonForm>Зарегистрироваться</ButtonForm>
-          <ButtonForm type='button' onClick={() => navigate("?login=true", { replace: true })}>Вход</ButtonForm>
-        </Authorization>
+      <ResetPassword />
 
-        <ResetPassword />
-
-      </ProtectedRouter>
 
       <main className="main">
         <Routes>
@@ -117,6 +114,10 @@ export default function App() {
 
           <Route path={`${ROUTELINKPRODUCT}:productId`} element={
             <ProductPage />
+          } />
+
+          <Route path="/cart" element={
+            <CartPage />
           } />
 
           <Route path={ROUTELINKFAVORITES} element={

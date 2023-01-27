@@ -6,6 +6,7 @@ import Modal from "../Modal/Modal";
 import { FORMOBJECT } from "../../Constant/Constant";
 import s from "./index.module.css";
 import ButtonForm from "../Buttons/ButtonForm/ButtonForm";
+import ProtectedRouter from "../ProtectedRouter/ProtectedRouter";
 
 export default function ResetPassword() {
 
@@ -34,18 +35,20 @@ export default function ResetPassword() {
 
     return (
         url.get("reset_password") &&
-        <Modal>
-            <div className={s.modal__content}>
-            <Form title="Востановления пароля" handleSubmit={handleSubmit(handleFormSubmit)}>
-                <p className={s.infoText}>Для получения временного пароля необходимо ввести email, указанный при регистрации.</p>
+        <ProtectedRouter>
+            <Modal>
+                <div className={s.modal__content}>
+                    <Form title="Востановления пароля" handleSubmit={handleSubmit(handleFormSubmit)}>
+                        <p className={s.infoText}>Для получения временного пароля необходимо ввести email, указанный при регистрации.</p>
 
-                <FormInput {...email} type="email" placeholder="Введите email" />
-                {errors?.email && <p className={s.error}>{errors.email.message}</p>}
+                        <FormInput {...email} type="email" placeholder="Введите email" />
+                        {errors?.email && <p className={s.error}>{errors.email.message}</p>}
 
-                <ButtonForm>Отравить</ButtonForm>
+                        <ButtonForm>Отравить</ButtonForm>
 
-            </Form>
-            </div>
-        </Modal>
+                    </Form>
+                </div>
+            </Modal>
+        </ProtectedRouter>
     )
 }
