@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { INITIALRATING } from "../../Constant/Constant";
 import { fetchRewiew } from "../../Storage/Slices/SingleProductSlice";
-import ButtonForm from "../Buttons/ButtonForm/ButtonForm";
+import Button from "../Buttons/Button/Button";
 import Form from "../Form/Form";
 import FormInput from "../FormInput/FormInput";
 import Rating from "../Rating/Rating";
@@ -46,7 +46,7 @@ export default function FormReview({ title = "Отзыв о товаре", produ
             <span className={s.content__text}>Комментарий: </span>
             <FormInput {...comment} type_input="textarea" placeholder="Введите текст отзыва." />
             {errors?.comment && <p className={s.error}>{errors.comment.message}</p>}
-            <ButtonForm>Отправить</ButtonForm>
+            <Button>Отправить</Button>
         </Form>
     )
 }

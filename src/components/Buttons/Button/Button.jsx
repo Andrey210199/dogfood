@@ -1,7 +1,7 @@
 
 import s from "./index.module.css";
 
-export default function ButtonForm({children, onClick, type="submit"}){
+export default function Button({children, onClick, type="submit"}){
 
     function handleClick(e){
        onClick && onClick(e);

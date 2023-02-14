@@ -22,6 +22,7 @@ import ButtonLike from "../Buttons/ButtonLike/ButtonLike";
 import Spiner from "../Spiner/Spiner";
 import ButtonCount from "../ButtonCount/ButtonCount";
 import { addCart, setCountCart } from "../../Storage/Slices/CartSlice";
+import Button from "../Buttons/Button/Button";
 
 dayjs.locale("ru");
 dayjs.extend(relativeTime);
@@ -83,7 +84,7 @@ export default function Page() {
 
                     <div className={s.wight}>
                         <ButtonCount {...product} />
-                        <button onClick={handleAddCart}>{count ? "В корзине" : "В корзину"}</button>
+                        <Button onClick={handleAddCart}>{count ? "В корзине" : "В корзину"}</Button>
                     </div>
 
                     <ButtonLike like={like} handleClickLike={handleClickLike} />

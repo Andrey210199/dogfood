@@ -1,0 +1,26 @@
+.cart {
+    max-width: 1000px;
+    margin: 0 auto;
+
+    &__content{
+
+        display: grid;
+        grid-template-columns: minmax(1000px, 1fr) 200px;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    &__item{
+        display: grid;
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .cart {
+
+        &__content{
+            grid-template-columns: auto;
+        }
+    }
+}

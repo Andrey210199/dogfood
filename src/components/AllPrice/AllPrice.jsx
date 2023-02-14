@@ -1,4 +1,5 @@
 
+import Button from "../Buttons/Button/Button";
 import s from "./index.module.css";
 
 export default function AllPrice(props) {
@@ -11,7 +12,6 @@ export default function AllPrice(props) {
     };
 
     for (let i in props) {
-        console.log(props[i].discount)
         price.price += (props[i].price * props[i].quality);
         price.quality += props[i].quality;
         price.allPrice += Math.round(props[i].price - props[i].price * (props[i].discount / 100)) * props[i].quality;
@@ -24,7 +24,7 @@ export default function AllPrice(props) {
             <div className={s.cart__price}>{`Товары (${price.quality}): ${price.price}`}</div>
             <div className={s.cart__discount}>Скидка: {price.discount}</div>
             <h4 className={s.cart__allPrice}>Общая стоимость: {price.allPrice}</h4>
-            <button>Оформить заказ</button>
+            <Button>Оформить заказ</Button>
         </div>
     )
 }

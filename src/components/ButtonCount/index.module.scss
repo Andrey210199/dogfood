@@ -1,0 +1,22 @@
+.wrap {
+
+    border: 1px solid black;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 1.2em;
+
+    &__btn {
+        background-color: transparent;
+        border: none;
+        border-radius: 20px;
+        font-size: 1.2rem;
+
+        &:hover {
+            background-color: gray;
+        }
+
+    }
+}

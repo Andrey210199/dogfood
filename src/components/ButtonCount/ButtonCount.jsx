@@ -25,9 +25,9 @@ export default function ButtonCount(props) {
 
     return (
         <div className={s.wrap}>
-            <button onClick={handleDecClick}>-</button>
+            <button className={s.wrap__btn} onClick={handleDecClick}>-</button>
             <span>{count ? count : "0"}</span>
-            <button onClick={handleIncreClick}>+</button>
+            <button className={s.wrap__btn} onClick={handleIncreClick}>+</button>
         </div>
 
     )

@@ -24,7 +24,7 @@ import { fetchProducts, fetchSearch } from '../../Storage/Slices/ProductsSlice';
 
 import s from './index.module.css';
 import { getCookie } from '../../Utilites/Cookie';
-import ButtonForm from '../Buttons/ButtonForm/ButtonForm';
+import ButtonForm from '../Buttons/Button/Button';
 import { useCallback } from 'react';
 import { noToken } from '../../Utilites/StoreFunctions';
 import CartPage from '../../Pages/CartPage/CartPage';

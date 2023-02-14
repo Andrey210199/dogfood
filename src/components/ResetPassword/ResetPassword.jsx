@@ -5,7 +5,7 @@ import FormInput from "../FormInput/FormInput";
 import Modal from "../Modal/Modal";
 import { FORMOBJECT } from "../../Constant/Constant";
 import s from "./index.module.css";
-import ButtonForm from "../Buttons/ButtonForm/ButtonForm";
+import ButtonForm from "../Buttons/Button/Button";
 import ProtectedRouter from "../ProtectedRouter/ProtectedRouter";
 
 export default function ResetPassword() {

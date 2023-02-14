@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { deleteCart } from "../../Storage/Slices/CartSlice";
 import ButtonCount from "../ButtonCount/ButtonCount"
+import Button from "../Buttons/Button/Button";
 import Price from "../Price/Price"
 
 import s from "./index.module.css";
@@ -16,13 +17,15 @@ export default function Cart(props) {
 
     return (
         <div className={s.cart}>
-            <img src={pictures} className={s.cart__img} />
-            <div>
-                <h3>{name}</h3>
+            <img src={pictures} className={s.cart__img} alt="product" />
+            <div className={s.cart__info}>
+                <h3 className={s.cart__name}>{name}</h3>
                 <ButtonCount {...props} />
-                <Price discount={discount} price={price} />
-                <button onClick={handleClick}>delete</button>
+                <div className={s.cart__price}>
+                    <Price discount={discount} price={price} />
+                </div>
             </div>
+            <Button onClick={handleClick}>delete</Button>
         </div>
     )
 }

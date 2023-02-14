@@ -24,20 +24,24 @@ export default function Header({ children }) {
             <div className={s.header__content}>
                 {children}
 
-                {userToken ?
+               
                     <div className={s.user}>
-                        <Link to={ROUTELINKFAVORITES} className={s.header__link}><LikeImg className={s.header__favorite} />
+                    {userToken &&  <Link to={ROUTELINKFAVORITES} className={s.header__link}><LikeImg className={s.header__favorite} />
                             {!!favoriteCount && <span className={s.header__link__count}>{favoriteCount}</span>}
-                        </Link>
+                        </Link> }
 
                         <Link to="/cart" className={s.header__link}><CartImg />{<span className={s.header__link__count}>{Object.keys(count).length}</span>}</Link>
 
-                        <span className={s.user__name}>{userData?.name}</span>
+                      {userToken &&
+                      <>
+                       <span className={s.user__name}>{userData?.name}</span>
                         <ButtonLink onClick={unAutch}>Выход</ButtonLink>
+                      </> }
+                      {!userToken && <ButtonLink navText="?login=true">Вход</ButtonLink>}
                     </div>
 
-                    : <ButtonLink navText="?login=true">Вход</ButtonLink>
-                }
+
+                
 
 
             </div>
