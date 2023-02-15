@@ -21,8 +21,7 @@ import DiscountTag from "../DiscountTag/DiscountTag";
 import ButtonLike from "../Buttons/ButtonLike/ButtonLike";
 import Spiner from "../Spiner/Spiner";
 import ButtonCount from "../ButtonCount/ButtonCount";
-import { addCart, setCountCart } from "../../Storage/Slices/CartSlice";
-import Button from "../Buttons/Button/Button";
+import ButtonCart from "../Buttons/ButtonCart/ButtonCart";
 
 dayjs.locale("ru");
 dayjs.extend(relativeTime);
@@ -32,7 +31,6 @@ export default function Page() {
     const produtcState = useSelector(state => state.singleProduct);
     const product = produtcState.data;
     const { name, description, price, discount, reviews, likes, pictures, _id: id } = product;
-    const count = useSelector(state => state.cart.data[id]?.quality);
     const { comments, commentsLoading } = produtcState;
     const like = likes && isLike(likes, user?._id);
     const descriptionHTML = createMarkup(description);
@@ -49,15 +47,6 @@ export default function Page() {
         dispatch(fetchChangeLike(product))
             .then(updateProduct => dispatch(setProductState(updateProduct.payload.data)));
 
-    }
-
-    function handleAddCart() {
-        if (!count) {
-            dispatch(addCart({ ...product }));
-        }
-        else {
-            dispatch(setCountCart({ id, quality: count + 1 }))
-        }
     }
 
     return (
@@ -84,7 +73,7 @@ export default function Page() {
 
                     <div className={s.wight}>
                         <ButtonCount {...product} />
-                        <Button onClick={handleAddCart}>{count ? "В корзине" : "В корзину"}</Button>
+                        <ButtonCart product={product} />
                     </div>
 
                     <ButtonLike like={like} handleClickLike={handleClickLike} />

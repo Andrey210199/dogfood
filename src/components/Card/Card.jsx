@@ -7,10 +7,10 @@ import { ROUTELINKPRODUCT } from "../../Constant/Constant.js";
 import { fetchChangeLike } from "../../Storage/Slices/ProductsSlice";
 
 import s from "./index.module.css";
-import ButtonLink from "../Buttons/ButtonLink/ButtonLink";
 import Price from "../Price/Price";
 import DiscountTag from "../DiscountTag/DiscountTag";
 import ButtonLike from "../Buttons/ButtonLike/ButtonLike";
+import ButtonCart from "../Buttons/ButtonCart/ButtonCart";
 
 
 
@@ -46,7 +46,7 @@ export default function Card(props) {
 
             </Link>
 
-            <ButtonLink>В корзину</ButtonLink>
+            <ButtonCart product={props} />
         </div>
     )
 }

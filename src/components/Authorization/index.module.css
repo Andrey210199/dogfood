@@ -2,3 +2,9 @@
 .modal__content{
     width: 400px;
 }
+
+@media screen and (max-width: 1000px) {
+    .modal__content{
+        width: 100%;
+    }
+}

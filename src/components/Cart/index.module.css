@@ -1,6 +1,6 @@
 .cart {
   display: grid;
-  grid-template-columns: repeat(3, minmax(50px, 1fr));
+  grid-template-columns: 30% 60% 10%;
   grid-template-rows: 200px;
 }
 .cart__img {
@@ -11,7 +11,7 @@
 }
 .cart__info {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 5px;
   align-items: center;
 }
@@ -23,4 +23,10 @@
 }
 .cart__name {
   display: flex;
+}
+
+@media screen and (max-width: 1000px) {
+  .cart {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 }/*# sourceMappingURL=index.module.css.map */
