@@ -4,7 +4,7 @@ import isLike from "../../Utilites/IsLike.js";
 import { createMarkup, scrollClear } from "../../Utilites/Product.js";
 import ContentHeader from "../ContentHeader/ContentHeader";
 import Rating from "../Rating/Rating";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -22,6 +22,8 @@ import ButtonLike from "../Buttons/ButtonLike/ButtonLike";
 import Spiner from "../Spiner/Spiner";
 import ButtonCount from "../ButtonCount/ButtonCount";
 import ButtonCart from "../Buttons/ButtonCart/ButtonCart";
+import usePaginate from "../../Hooks/UsePaginate";
+import { Paginate } from "../Paginate/Paginate";
 
 dayjs.locale("ru");
 dayjs.extend(relativeTime);
@@ -35,6 +37,9 @@ export default function Page() {
     const like = likes && isLike(likes, user?._id);
     const descriptionHTML = createMarkup(description);
     const dispatch = useDispatch();
+    const paginate = usePaginate(10, comments ? comments : []);
+
+    const [isdisabled, setIsDisabled] = useState(false);
 
     const rating = useMemo(() => Math.round(reviews?.reduce((acc, curr) => acc += curr.rating, 0) / reviews?.length), [reviews]);
 
@@ -44,8 +49,10 @@ export default function Page() {
 
 
     function handleClickLike() {
+        setIsDisabled(true);
         dispatch(fetchChangeLike(product))
-            .then(updateProduct => dispatch(setProductState(updateProduct.payload.data)));
+            .then(updateProduct => dispatch(setProductState(updateProduct.payload.data)))
+            .then(() => setIsDisabled(false));
 
     }
 
@@ -76,7 +83,7 @@ export default function Page() {
                         <ButtonCart product={product} />
                     </div>
 
-                    <ButtonLike like={like} handleClickLike={handleClickLike} />
+                    <ButtonLike like={like} handleClickLike={handleClickLike} disabled={isdisabled} />
                     {getCookie("token") && <span>{like ? "В избранном" : "В избранное"}</span>}
 
                     <div className={s.delivery}>
@@ -136,9 +143,13 @@ export default function Page() {
                 {getCookie("token") ? <FormReview title={`Отзыв о ${name}`} productId={id} />
                     : <b className={s.review__text}>Комментарии могут оставлять только авторизованые пользователи.</b>}
                 {commentsLoading ? <Spiner />
-                    : <ul className={s.comments}>
-                        {comments?.map(comment => <li key={comment._id} className={s.comment}> <span><b>{comment.author.name}</b> {dayjs(comment.created_at).fromNow()}</span> <Rating rating={comment.rating} /> {comment.text}</li>)}
-                    </ul>}
+                    : <>
+                        <ul className={s.comments}>
+                            {paginate.dataPage()?.map(comment => <li key={comment._id} className={s.comment}> <span><b>{comment.author.name}</b> {dayjs(comment.created_at).fromNow()}</span> <Rating rating={comment.rating} /> {comment.text}</li>)}
+                        </ul>
+                        {paginate.maxPage > 1 && <Paginate paginateHook={paginate} />}
+                    </>
+                }
             </div>
 
         </div>

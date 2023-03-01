@@ -18,13 +18,17 @@ export default function AllPrice(props) {
         price.discount = Math.round(((price.price - price.allPrice) / price.price) * 100);
     }
 
+   function handleClick(){
+        alert("Не работает!");
+    }
+
     return (
         <div className={s.cart}>
             <h3 className={s.cart__title}>Ваша корзина</h3>
             <div className={s.cart__price}>{`Товары (${price.quality}): ${price.price}`}</div>
             <div className={s.cart__discount}>Скидка: {price.discount}</div>
             <h4 className={s.cart__allPrice}>Общая стоимость: {price.allPrice}</h4>
-            <Button>Оформить заказ</Button>
+            <Button onClick={handleClick}>Оформить заказ</Button>
         </div>
     )
 }

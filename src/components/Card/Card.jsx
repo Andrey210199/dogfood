@@ -11,6 +11,7 @@ import Price from "../Price/Price";
 import DiscountTag from "../DiscountTag/DiscountTag";
 import ButtonLike from "../Buttons/ButtonLike/ButtonLike";
 import ButtonCart from "../Buttons/ButtonCart/ButtonCart";
+import { useState } from "react";
 
 
 
@@ -20,8 +21,12 @@ export default function Card(props) {
     const user = useSelector(state => state.user.data);
     const dispatch = useDispatch();
 
+    const [isdisabled, setIsDisabled] = useState(false);
+
     function handleClickLike() {
-        dispatch(fetchChangeLike(props));
+        setIsDisabled(true);
+        dispatch(fetchChangeLike(props))
+            .then(() => setIsDisabled(false));
     }
 
     const like = isLike(likes, user?._id);
@@ -32,7 +37,7 @@ export default function Card(props) {
             <DiscountTag discount={discount}>
                 <div className={s.card__sticky_right}>
 
-                    <ButtonLike handleClickLike={handleClickLike} like={like} />
+                    <ButtonLike handleClickLike={handleClickLike} like={like} disabled={isdisabled} />
                 </div>
             </DiscountTag>
 

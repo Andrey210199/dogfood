@@ -1,92 +1,101 @@
 import { getCookie } from "./Cookie";
 
 class Api {
+    #url;
+    #headers;
     constructor({ baseUrl, headers }) {
-        this._url = baseUrl;
-        this._headers = headers;
+        this.#url = baseUrl;
+        this.#headers = headers;
     }
 
-    _onResponse = (res) => {
+    #onResponse = (res) => {
         return res.ok ? res.json() : res.json().then(error => Promise.reject(error.message));
     }
 
-    getProducts(idProduct ="") {
-        return fetch(`${this._url}/products${idProduct && `/${idProduct}`}`, {
-            method: "GET",
-            headers:{...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
-        }).then(this._onResponse);
+    #methodSending(method = "GET", data) {
+        switch (true) {
+            case method === "GET" || method === "DELETE":
+                return {
+                    method: method,
+                    headers: { ...this.#headers, Authorization: getCookie("token") ? getCookie("token") : this.#headers.Authorization }
+                }
+
+            default:
+                return {
+                    method: method,
+                    headers: { ...this.#headers, Authorization: getCookie("token") },
+                    body: JSON.stringify(data)
+                }
+        }
+    }
+
+    getProducts(idProduct = "") {
+        return fetch(`${this.#url}/products${idProduct && `/${idProduct}`}`, this.#methodSending()).then(this.#onResponse);
+    }
+
+    createProduct(newProduct) {
+        return fetch(`${this.#url}/products`, this.#methodSending("POST", newProduct)).then(this.#onResponse);
+    }
+
+    setProduct({ idProduct, method = "DELETE", data = {} }) {
+        return fetch(`${this.#url}/products/${idProduct}`, this.#methodSending(method, data)).then(this.#onResponse);
     }
 
     userInfo(dataUser) {
-        return fetch(`${this._url}/users/me`, !!dataUser ? {
-            method: "PATH",
-            headers:{...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization},
-            body: JSON.stringify(dataUser)
-        } : {
-            method: "GET",
-            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
-        }
-        ).then(this._onResponse);
+        return fetch(`${this.#url}/users/me`, !!dataUser ? this.#methodSending("PATH", dataUser) : this.#methodSending()
+        ).then(this.#onResponse);
     }
 
     setProductsUser(idProduct = "") {
         return Promise.all([this.getProducts(idProduct), this.userInfo()])
-            .catch(this._onResponse);
+            .catch(this.#onResponse);
     }
 
     checkLike(productId, islike) {
-        return fetch(`${this._url}/products/likes/${productId}`, {
-            method: islike ? "DELETE" : "PUT",
-            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
-        }).then(this._onResponse);
+        return fetch(`${this.#url}/products/likes/${productId}`, islike ? this.#methodSending("DELETE") : this.#methodSending("PUT")).then(this.#onResponse);
     }
 
     search(searchQuery) {
-        return fetch(`${this._url}/products/search?query=${searchQuery}`, {
-            method: "GET",
-            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
-        }).then(this._onResponse);
+        return fetch(`${this.#url}/products/search?query=${searchQuery}`, this.#methodSending()).then(this.#onResponse);
     }
 
     setReview(dataComment, productId, reviewId = "") {
-        return fetch(`${this._url}/products/review/${productId}/${reviewId && reviewId}`, {
-            method: reviewId === "" ? "POST" : "DELETE",
-            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization},
-            body: JSON.stringify(dataComment)
-        }).then(this._onResponse);
+        return fetch(`${this.#url}/products/review/${productId}/${reviewId && reviewId}`, reviewId === "" ? this.#methodSending("POST", dataComment) : this.#methodSending("DELETE")
+        ).then(this.#onResponse);
 
     }
 
-    getComments(productId){
-        return fetch(`${this._url}/products/review/${productId}`, {
-            method: "GET",
-            headers: this._headers
-        }).then(this._onResponse);
+    getComments(productId) {
+        return fetch(`${this.#url}/products/review/${productId && productId}`, this.#methodSending()).then(this.#onResponse);
     }
 
     register(data) {
-        return fetch(`${this._url}/signup`, {
-            method: "POST",
-            headers: this._headers,
-            body: JSON.stringify(data)
-        }).then(this._onResponse);
+        return fetch(`${this.#url}/signup`, this.#methodSending("POST", data)).then(this.#onResponse);
 
     }
 
     authorize(data) {
-        return fetch(`${this._url}/signin`, {
-            method: "POST",
-            headers:{...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization},
-            body: JSON.stringify(data)
-        }).then(this._onResponse);
-
+        return fetch(`${this.#url}/signin`, this.#methodSending("POST", data)).then(this.#onResponse);
     }
 
-    checkToken(token) {
-        return fetch(`${this._url}/users/me`, {
-            method: "GET",
-            headers: {...this._headers, Authorization: getCookie("token") ? getCookie("token"): this._headers.Authorization}
-        }).then(this._onResponse);
+    setAvatar(avatar) {
+        return fetch(`${this.#url}/users/me/avatar`, this.#methodSending("PATCH", avatar)).then(this.#onResponse);
+    }
+
+    setUser(data) {
+        return fetch(`${this.#url}/users/me`, this.#methodSending("PATCH", data)).then(this.#onResponse);
+    }
+
+    forgotPass(email) {
+        return fetch(`${this.#url}/forgot-password`, this.#methodSending("POST", email)).then(this.#onResponse);
+    }
+
+    resetPass(newPass) {
+        return fetch(`${this.#url}password-reset/${getCookie("token")}`, this.#methodSending("PATCH", newPass)).then(this.#onResponse);
+    }
+
+    checkToken() {
+        return fetch(`${this._url}/users/me`, this.#methodSending()).then(this.#onResponse);
     }
 }
 
