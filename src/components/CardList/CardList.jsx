@@ -3,21 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import useDebounce from "../../Hooks/UseDebounce";
 import usePaginate from "../../Hooks/UsePaginate";
 import NotFound from "../../Pages/NotFound/NotFound";
-import { fetchSearch } from "../../Storage/Slices/ProductsSlice";
+import { fetchSearch, setChangePage } from "../../Storage/Slices/ProductsSlice";
 import Card from "../Card/Card";
 import { Paginate } from "../Paginate/Paginate";
 import s from "./index.module.css";
 
 export default function CardList({ goods }) {
-    
-    const { search } = useSelector(state => state.products);
+
+    const { search, page } = useSelector(state => state.products);
     const dispatch = useDispatch();
     const searchDebounce = useDebounce(search, 500);
-
-    const paginate = usePaginate(12, goods);
+    const paginate = usePaginate(12, goods, page);
 
     const onRequest = useCallback((searchDebounce) => {
-        return dispatch(fetchSearch(searchDebounce));
+        return dispatch(fetchSearch(searchDebounce))
+        .then(()=> dispatch(setChangePage(1)));
 
     }, [dispatch]);
 
@@ -38,7 +38,7 @@ export default function CardList({ goods }) {
                 }
             </div>
 
-            {paginate.maxPage > 1 && <Paginate paginateHook={paginate} />}
+            {paginate.maxPage > 1 && <Paginate paginateHook={paginate} setChangePage={setChangePage} />}
         </>
 
 

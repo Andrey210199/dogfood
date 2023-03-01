@@ -10,7 +10,8 @@ const initialState = {
 
     search: null,
     favorites: [],
-    total: null
+    total: null,
+    page: 1
 }
 
 export const fetchProducts = createAsyncThunk(
@@ -21,8 +22,8 @@ export const fetchProducts = createAsyncThunk(
         try {
 
             const { user } = getState();
-            const data = await api.getProducts();
-            return fulfillWithValue({ ...data, currentUser: user.data });
+            const data = await api.search("");
+            return fulfillWithValue({ products: data, currentUser: user.data });
 
         } catch (error) {
             return rejectWithValue(error);
@@ -40,7 +41,7 @@ export const fetchChangeLike = createAsyncThunk(
             const { user } = getState();
             const liked = isLike(product.likes, user.data._id);
             const data = await api.checkLike(product._id, liked);
-            return fulfillWithValue({data, liked});
+            return fulfillWithValue({ data, liked });
 
         } catch (error) {
             return rejectWithValue(error);
@@ -51,13 +52,13 @@ export const fetchChangeLike = createAsyncThunk(
 export const fetchSearch = createAsyncThunk(
     `${PRODUCTSSTATENAME}/fetchSearch`,
 
-    async function(search, {rejectWithValue, fulfillWithValue, extra: api}){
+    async function (search, { rejectWithValue, fulfillWithValue, extra: api }) {
 
         try {
 
             const data = await api.search(search);
             return fulfillWithValue(data);
-            
+
         } catch (error) {
             rejectWithValue(error);
         }
@@ -70,8 +71,12 @@ const productsSlice = createSlice({
     initialState,
     reducers: {
 
-        setSearchState: (state, action) =>{
+        setSearchState: (state, action) => {
             state.search = action.payload;
+        },
+
+        setChangePage: (state, action) => {
+            state.page = action.payload;
         }
 
     },
@@ -82,7 +87,6 @@ const productsSlice = createSlice({
         })
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 const { total, products, currentUser } = action.payload;
-
                 state.total = total;
                 state.data = products;
                 state.favorites = state.data.filter(product => isLike(product.likes, currentUser._id));
@@ -91,15 +95,15 @@ const productsSlice = createSlice({
             .addCase(fetchChangeLike.fulfilled, (state, action) => {
                 const { liked, data } = action.payload;
                 state.data = state.data.map(card => card._id === data._id ? data : card);
-                
+
                 if (!liked) {
                     state.favorites.push(data);
                 }
                 else {
-                   state.favorites = state.favorites.filter(card => card._id !== data._id);
+                    state.favorites = state.favorites.filter(card => card._id !== data._id);
                 }
             })
-            .addCase(fetchSearch.fulfilled, (state, action)=>{
+            .addCase(fetchSearch.fulfilled, (state, action) => {
 
                 state.data = action.payload;
             })
@@ -111,5 +115,5 @@ const productsSlice = createSlice({
     }
 });
 
-export const {setSearchState} = productsSlice.actions;
+export const { setSearchState, setChangePage } = productsSlice.actions;
 export default productsSlice.reducer;

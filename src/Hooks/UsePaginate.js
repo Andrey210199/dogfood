@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
-export default function usePaginate(cnt, data) {
+export default function usePaginate(cnt, data, curPage = 1) {
 
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(curPage);
     const maxPage = Math.ceil(data.length / cnt);
 
     useEffect(() => {
-        setPage(1);
-    }, [data])
+        setPage(curPage);
+    }, [data, curPage])
 
     function next() {
         const newPage = Math.min(page + 1, maxPage);
