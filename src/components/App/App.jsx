@@ -10,8 +10,6 @@ import { useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import useDebounce from '../../Hooks/UseDebounce';
-
 import ProductPage from '../../Pages/Product-page/ProductPage';
 import NotFound from '../../Pages/NotFound/NotFound';
 import Spiner from '../Spiner/Spiner';
@@ -20,27 +18,20 @@ import FavoritePage from '../../Pages/FavoritePage/FavoritePage';
 
 import { ROUTELINKFAQ, ROUTELINKFAVORITES, ROUTELINKPRODUCT } from "../../Constant/Constant.js";
 import { fetchGetUser, fetchUserAutch, fetchRegistration, fetchTokenCheck } from '../../Storage/Slices/UserSlice';
-import { fetchProducts, fetchSearch } from '../../Storage/Slices/ProductsSlice';
+import { fetchProducts } from '../../Storage/Slices/ProductsSlice';
 
 import s from './index.module.css';
 import { getCookie } from '../../Utilites/Cookie';
 import ButtonForm from '../Buttons/Button/Button';
-import { useCallback } from 'react';
 import { noToken } from '../../Utilites/StoreFunctions';
 import CartPage from '../../Pages/CartPage/CartPage';
 
 export default function App() {
 
-  const { data: cards, loading: isLoading, error: errorState, search } = useSelector(state => state.products);
+  const { data: cards, loading: isLoading, error: errorState } = useSelector(state => state.products);
   const token = getCookie("token");
-  const searchDebounce = useDebounce(search, 500);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const onRequest = useCallback((searchDebounce) => {
-    return dispatch(fetchSearch(searchDebounce));
-
-  }, [dispatch]);
 
   function logined(data) {
     dispatch(fetchUserAutch(data))
@@ -52,14 +43,6 @@ export default function App() {
   function register(data) {
     dispatch(fetchRegistration(data));
   }
-
-  //Поиск ввод
-  useEffect(() => {
-
-    if (searchDebounce !== null)
-      onRequest(searchDebounce);
-
-  }, [searchDebounce, onRequest]);
 
   useEffect(() => {
     if (token) {

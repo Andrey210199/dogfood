@@ -1,12 +1,34 @@
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import useDebounce from "../../Hooks/UseDebounce";
 import usePaginate from "../../Hooks/UsePaginate";
 import NotFound from "../../Pages/NotFound/NotFound";
+import { fetchSearch } from "../../Storage/Slices/ProductsSlice";
 import Card from "../Card/Card";
 import { Paginate } from "../Paginate/Paginate";
 import s from "./index.module.css";
 
 export default function CardList({ goods }) {
+    
+    const { search } = useSelector(state => state.products);
+    const dispatch = useDispatch();
+    const searchDebounce = useDebounce(search, 500);
 
     const paginate = usePaginate(12, goods);
+
+    const onRequest = useCallback((searchDebounce) => {
+        return dispatch(fetchSearch(searchDebounce));
+
+    }, [dispatch]);
+
+    //Поиск ввод
+    useEffect(() => {
+        if (searchDebounce !== null)
+            onRequest(searchDebounce);
+
+    }, [searchDebounce, onRequest]);
+
+
 
     return (
         <>
