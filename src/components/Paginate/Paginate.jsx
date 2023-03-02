@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import cn from "classnames";
+
 import s from "./index.module.css";
 
 export function Paginate({ paginateHook, maxViewPage = 10, setChangePage }) {
@@ -80,11 +82,11 @@ export function Paginate({ paginateHook, maxViewPage = 10, setChangePage }) {
 
     return (
         <div className={s.paginate}>
-            <button className={s.paginate_btn} onClick={startPage} >{"<<"}</button>
-            <button className={s.paginate_btn} onClick={prevPage}>{"<"}</button>
-            {dataPage.map(page => <button className={s.paginate__btn} key={page} value={page} onClick={changePage}>{page}</button>)}
-            <button lassName={s.paginate_btn} onClick={nextPate}>{">"}</button>
-            <button className={s.paginate_btn} onClick={lastPage}>{">>"}</button>
+            <button className={s.paginate__btn} onClick={startPage} >{"<<"}</button>
+            <button className={s.paginate__btn} onClick={prevPage}>{"<"}</button>
+            {dataPage.map(page => <button className={cn(s.paginate__btn, {[s.paginate__btn_active]: (page === paginateHook.page) })} key={page} value={page} onClick={changePage}>{page}</button>)}
+            <button className={s.paginate__btn} onClick={nextPate}>{">"}</button>
+            <button className={s.paginate__btn} onClick={lastPage}>{">>"}</button>
 
         </div>
     );

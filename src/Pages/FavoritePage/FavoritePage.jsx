@@ -9,7 +9,7 @@ export default function FavoritePage(){
     return(
         <>
          <ContentHeader title="Избранное"/>
-         <CardList goods={favorites}/>
+         <CardList goods={favorites} pages={1}/>
         </>
     )
 }

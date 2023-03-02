@@ -3,4 +3,21 @@
   flex-wrap: wrap;
   padding: 5px 0;
   justify-content: center;
+  gap: 2px;
+}
+.paginate__btn {
+  border-radius: 50%;
+  padding: 0.6% 1.2%;
+  font-size: 1rem;
+  background-color: #ffc300;
+}
+.paginate__btn_active {
+  background-color: #665a34;
+  color: #f9f9f9;
+}
+.paginate__btn:hover {
+  background-color: #b18b0e;
+}
+.paginate__btn:active {
+  background-color: #947306;
 }/*# sourceMappingURL=index.module.css.map */

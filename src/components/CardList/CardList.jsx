@@ -8,12 +8,11 @@ import Card from "../Card/Card";
 import { Paginate } from "../Paginate/Paginate";
 import s from "./index.module.css";
 
-export default function CardList({ goods }) {
-
+export default function CardList({ goods, pages }) {
     const { search, page } = useSelector(state => state.products);
     const dispatch = useDispatch();
     const searchDebounce = useDebounce(search, 500);
-    const paginate = usePaginate(12, goods, page);
+    const paginate = usePaginate(12, goods, pages ? pages: page);
 
     const onRequest = useCallback((searchDebounce) => {
         return dispatch(fetchSearch(searchDebounce))

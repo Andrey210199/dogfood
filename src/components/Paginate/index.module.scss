@@ -1,6 +1,30 @@
+@use "../../Constant/stiles/variables" as var;
+
 .paginate{
     display: flex;
     flex-wrap: wrap;
     padding: 5px 0;
     justify-content: center;
+    gap: 2px;
+
+    &__btn{
+        border-radius: 50%;
+        padding: 0.6% 1.2%;
+        font-size: 1rem;
+        background-color: var.$btn-color;
+
+        &_active{
+            background-color: var.$btn_active;
+            color: var.$link_hover;
+        }
+
+        &:hover{
+            background-color: var.$btn-color_hover;
+        }
+
+        &:active{
+            background-color: var.$btn-color_active;
+        }
+    }
+
 }
